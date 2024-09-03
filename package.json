@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "geolib": "^3.3.4",
+    "init": "^0.1.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "rx_route",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {
+    "prisma": "^5.13.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
