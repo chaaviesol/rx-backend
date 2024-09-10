@@ -1,0 +1,31 @@
+name: Deploy Backend Application
+
+#on:
+ # push:
+  #  branches:
+   #   - main
+  workflow_dispatch: # This enables manual trigger
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Backend Code
+      uses: actions/checkout@v3
+
+    - name: Clone Backend Repository on EC2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: |
+        echo "${SSH_PRIVATE_KEY}" > private_key.pem
+        chmod 400 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@52.66.145.37 << 'EOF'
+          cd /home/ec2-user/rx-test-final || git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/rx-test-final
+          cd /home/ec2-user/rx-test-final
+          git pull
+        EOF
+
+    - name: Cleanup SSH Key
+      run: rm private_key.pem
