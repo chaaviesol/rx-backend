@@ -1,0 +1,33 @@
+name: Deploy Backend Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Backend Code
+      uses: actions/checkout@v3
+
+    - name: Clone or Update Backend Repository on EC2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      run: |
+        echo "${SSH_PRIVATE_KEY}" > private_key.pem
+        chmod 400 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@52.66.145.37 << 'EOF'
+          if [ ! -d "/home/ec2-user/Rx_Route/.git" ]; then
+            rm -rf /home/ec2-user/Rx_Route # Remove the directory if it's not a valid git repo
+            git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/Rx_Route
+          else
+            cd /home/ec2-user/Rx_Route && git pull origin main
+          fi
+        EOF
+
+    - name: Cleanup SSH Key
+      run: rm private_key.pem
