@@ -392,7 +392,7 @@ const get_addedDoctors = async (req, res) => {
         const getDr = await prisma.doctor_details.findMany({
             where: {
                 created_UId: rep_UniqueId,
-                status: "active"
+                status: "active" 
             }
         });
         console.log({ getDr });
@@ -1295,8 +1295,21 @@ const add_chemist = async (req, res) => {
 //get chemist(in use)
 const get_chemist = async (req, res) => {
     try {
-        // const { uniqueId } = req.body
-        const getData = await prisma.add_chemist.findMany({
+        const { uniqueId } = req.body
+        let getData ;
+        if(uniqueId){
+             getData = await prisma.add_chemist.findMany({
+                orderBy:{
+                    date_time:"desc"
+                },
+                where:{
+                    status:"Active",
+                    unique_Id:uniqueId
+                }
+            })
+            console.log({ getData })
+        }else{
+         getData = await prisma.add_chemist.findMany({
             orderBy:{
                 date_time:"desc"
             },
@@ -1305,6 +1318,7 @@ const get_chemist = async (req, res) => {
             }
         })
         console.log({ getData })
+    }
         res.status(200).json({
             error: false,
             success: true,
@@ -1682,6 +1696,9 @@ const notifications = async(req,res)=>{
                 date_of_birth:{
                     startsWith:formattedTomorrow
                 }
+            },
+            orderBy:{
+                created_date:"desc"
             }
         })
         const findAnniversary = await prisma.doctor_details.findMany({
@@ -1690,6 +1707,9 @@ const notifications = async(req,res)=>{
               wedding_date:{
                 startsWith:formattedTomorrow
               }  
+            },
+            orderBy:{
+                created_date:"desc"
             }
         })
         console.log({findAnniversary})
@@ -1700,6 +1720,9 @@ const notifications = async(req,res)=>{
                 date_of_birth:{
                     startsWith:formattedToday
                 }
+            },
+            orderBy:{
+                created_date:"desc"
             }
         })
         console.log({birthdayToday})
@@ -1709,6 +1732,9 @@ const notifications = async(req,res)=>{
               wedding_date:{
                 startsWith:formattedToday
               }  
+            },
+            orderBy:{
+                created_date:"desc"
             }
         })
         console.log({anniversaryToday})
@@ -2059,15 +2085,7 @@ const markAsVisited = async(req,res)=>{
         
            console.log({findexistingVisit})
            if(findexistingVisit.length>0){
-            // const existingDate = findexistingVisit[0].date;
-         
-            // console.log({ existingDate });
-            // console.log({currentMonth})
-
-            // const [day,month,year] = existingDate.split('-')
-            // const existingDates = new Date(`${year}-${month}-${day}`);
-            // const existingmonth = existingDates.getMonth() + 1
-            // console.log({existingmonth})
+           
 
             if(currentMonth !== theDate){
                 const addNewDate = await prisma.visit_record.create({
@@ -2108,6 +2126,14 @@ const markAsVisited = async(req,res)=>{
             }
         })
         console.log({updateVisit})  
+          
+        //update detailedTravelPlan table
+        // const updatedetailedTravelPlan = await prisma.detailedTravelPlan.findMany({
+        //     where:{
+
+        //     }
+        // }) 
+        
        return res.status(200).json({
             error:false,
             success:true,
@@ -2554,6 +2580,7 @@ const getTravelPlan = async(req,res)=>{
             where:{
                 travelplan_id:travelPlanId
             }
+          
         })
         //find dr name
         // const drName = []
@@ -2567,6 +2594,7 @@ const getTravelPlan = async(req,res)=>{
                     firstName:true,
                     lastName:true
                 }
+              
             })
             console.log({findDr})
             getDetails[i] = {

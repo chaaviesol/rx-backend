@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { changeStatus } = require("../rep/rep.controller");
 const prisma = new PrismaClient();
 
 
@@ -118,36 +119,44 @@ const listArea = async(req,res)=>{
 
 //api for listing doctor in respective headquaters
 const listDoctors = async(req,res)=>{
-    console.log({req})
+    // console.log({req})
     try{
-        const {area,day,userId} = req.body
-        const findAreaId = await prisma.headquarters.findMany({
-            where:{
-                sub_headquarter:area
-            }
-        })
-        console.log({findAreaId})
-        const areaId = findAreaId[0].id
-        console.log({areaId})
-
-        const findDr = await prisma.doctor_details.findMany({
-            where:{
-                headquaters:{
-                    equals:areaId
-                },
-            
-               created_UId:userId
-                
-            }
-        })
-        console.log({findDr})
+        const {areas,day,userId} = req.body
+        console.log("area----",areas[0])
+        const areaID = []
         const ScheduleList = []
-        for(let i=0; i<findDr.length ;i++){
-            const drId = findDr[i].id
+        for(let i=0; i<areas.length;i++){
+            const area = areas[i]
+            console.log({area})
+            const findAreaId = await prisma.headquarters.findMany({
+                where:{
+                    sub_headquarter:area
+                }
+            })
+            // console.log({findAreaId})
+            areaID.push(findAreaId)
+            const areaId = findAreaId[0].id
+            // console.log({areaId})
+
+            const findDr = await prisma.doctor_details.findMany({
+                where:{
+                    headquaters:{
+                        equals:areaId
+                    },
+                   approvalStatus:"Accepted",
+                   created_UId:userId
+                    
+                }
+            })
+            console.log({findDr})
+                  
+        
+        for(let j=0; j<findDr.length ;j++){
+            const drId = findDr[j].id
             console.log({drId})
-            const firstName = findDr[i].firstName
-            const lastName = findDr[i].lastName
-            const visitType = findDr[i].visit_type
+            const firstName = findDr[j].firstName
+            const lastName = findDr[j].lastName
+            const visitType = findDr[j].visit_type
 
             //fing the schedule of the doctor
             const findSchedule = await prisma.schedule.findMany({
@@ -163,7 +172,7 @@ const listDoctors = async(req,res)=>{
             console.log({findSchedule})
 
                if (findSchedule.length > 0) {
-        ScheduleList.push({
+                     ScheduleList.push({
             doctor: {
                 id: drId,
                 firstName: firstName,
@@ -174,6 +183,11 @@ const listDoctors = async(req,res)=>{
         });
     }
         }
+        }
+        
+       
+
+  
 
 
         res.status(200).json({
@@ -182,6 +196,8 @@ const listDoctors = async(req,res)=>{
             message:"Successfull",
             data:ScheduleList
         })
+
+
     }catch(err){
         console.log({err})
         res.status(404).json({
@@ -827,6 +843,9 @@ const userAddedTP = async (req,res)=>{
         const getUserAddedTp = await prisma.travelPlan.findMany({
             where:{
                 user_id:userId
+            },
+            orderBy:{
+               created_date:"desc" 
             }
         })
         console.log({getUserAddedTp})
@@ -849,6 +868,236 @@ const userAddedTP = async (req,res)=>{
 }
 
 
+
+
+
+//getting doctors in a tp
+const doctorsInTp = async(req,res)=>{
+    try{
+        const{userId,month} = req.body
+        const findTpId = await prisma.travelPlan.findMany({
+            where:{
+                user_id:userId,
+                month:month,
+                status:"Approved"
+
+            }
+        })
+        console.log({findTpId})
+        const drData = []
+        for(let i=0; i<findTpId.length ; i++){
+            const tpID = findTpId[i].id
+            console.log({tpID})
+
+            const travelPlanList = await prisma.detailedTravelPlan.findMany({
+                where:{
+                    travelplan_id:tpID
+                }
+            })
+            console.log({travelPlanList})
+
+            for(let j=0; j<travelPlanList.length; j++){
+                const drId =travelPlanList[j].dr_id
+                console.log({drId})
+                const drDetails = await prisma.doctor_details.findMany({
+                    where:{
+                        id:drId
+                    }
+                })
+                console.log({drDetails})
+                drData.push(drDetails)
+            }
+        }
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:drData
+        })
+    }catch(err){
+        console.log({err})
+        res.status(400).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+
+    }
+}
+
+
+//get chemist
+const addedChemist = async(req,res)=>{
+    try{
+        const {userId} = req.body
+        const findDr = await prisma.doctor_details.findMany({
+            where:{
+                created_UId:userId,
+                approvalStatus:"Accepted"
+            }
+        })
+        // console.log({findDr})
+        // const chemist = []
+        for(let i =0;i<findDr.length;i++){
+            const doct_id = findDr[i].id
+            console.log({doct_id})
+            const findChemist = await prisma.doctor_address.findMany({
+                where:{
+                    doc_id:doct_id
+                },
+                select:{
+                    id:true,
+                    chemist:true,
+                    
+                }
+            })
+            console.log({findChemist})
+            // console.log("findchemist--------",findChemist[i].chemist)
+            // chemist.push(findChemist)
+
+            if (findChemist.length > 0) {
+                const chemistdata = findChemist[0].chemist;  
+                // console.log({ chemistdata });
+
+                for(let j=0; j<chemistdata.length; j++){
+                    const chemistAddress = chemistdata[j].address
+                    console.log({chemistAddress})
+                      const chemistDetails = await prisma.add_chemist.findMany({
+                        where:{
+                          address:chemistAddress
+                        },
+                        select:{
+                            building_name:true,
+                            mobile:true,
+                            address:true
+                        }
+                      })
+                      console.log({chemistDetails})
+                }
+            } else {
+                console.log("No chemist data found for this doctor");
+            }
+        }
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            // data:chemist
+        })
+
+    }catch(err){
+        console.log({err})
+        res.status(400).json({
+            error:true,
+            success:false,
+            message:"internal server error"
+        })
+    }
+}
+
+//check password
+const checkPassword = async(req,res)=>{
+    try{
+     const {userId} = req.body
+
+     const checkModifiedDate = await prisma.userData.findMany({
+        where:{
+            id:userId
+        }
+     })
+     console.log({checkModifiedDate})
+     const modified_date = checkModifiedDate[0].modified_date
+     console.log(modified_date)
+     if(modified_date){
+        return res.status(200).json({
+            error:false,
+            success:true,
+            message:"Password already modified"
+        })
+     }
+     return res.status(200).json({
+        error:false,
+        success:true,
+        message:"Modifie the password"
+    })
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
+
+
+
+//Reset password
+const resetPassword = async(req,res)=>{
+    try{
+        const{userId,password} = req.body
+         const date = new Date()
+        const getUserData = await prisma.userData.findMany({
+            where:{
+                id:userId
+            }
+        })
+        console.log({getUserData})
+        const modifiedDate = getUserData[0].modified_date
+        console.log({modifiedDate})
+        const id = getUserData[0].id
+        console.log({id})
+        if(modifiedDate){
+           return res.status(200).json({
+                error:false,
+                success:true,
+                message:"You have already modified the password"
+            })
+        }else{
+            const updatePassword = await prisma.userData.update({
+                where:{
+                    id:id
+                },
+                data:{
+                   password:password,
+                   modified_date:date
+                }
+            })
+            console.log({updatePassword})
+           return res.status(200).json({
+                error:false,
+                success:true,
+                message:"Successfully changed the password",
+                data:updatePassword
+            })
+        }
+       
+
+
+    }catch(err){
+        console.log({err})
+        res.status(400).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
+
+//approve travel plan
+const approveTp = async(req,res)=>{
+    try{
+
+    }catch(err){
+        console.log({err})
+
+    }
+}
+
+
+
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword
 }

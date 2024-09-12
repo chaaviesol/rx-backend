@@ -1,7 +1,7 @@
 const express = require('express')
 const userRouter =express.Router()
 const {userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,
-    getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,userAddedTP
+    getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword
 } = require('./user.controller')
 
 
@@ -20,6 +20,10 @@ userRouter.post('/SubmitAutomaticTp',SubmitAutomaticTp)
 userRouter.post('/findUserHeadquaters',findUserHeadquaters)
 userRouter.post('/EditTravelPlan',EditTravelPlan)
 userRouter.post('/userAddedTP',userAddedTP)
+userRouter.post('/doctorsInTp',doctorsInTp)
+userRouter.post('/addedChemist',addedChemist)
+userRouter.post('/resetPassword',resetPassword)
+userRouter.post('/checkPassword',checkPassword)
 // userRouter.post('/addAddress',addAddress)
 
 

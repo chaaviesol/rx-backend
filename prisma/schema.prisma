@@ -226,6 +226,8 @@ model visit_record{
   date             String?
   status           String?
   created_date     DateTime
+  visited_status   Boolean?
+  visitedDate      String?
  }
 
  model userData{

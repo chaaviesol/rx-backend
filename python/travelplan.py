@@ -1,10 +1,11 @@
 import json
 import sys
 import calendar
-from datetime import datetime
-import pprint
+# from datetime import datetime
+from datetime import datetime, timedelta
+# import pprint
 
-# Load the schedule data from the JSON file passed as an argument
+# Load the schedule data file from the first argument
 schedule_data_file = sys.argv[1]
 
 with open(schedule_data_file, 'r') as file:
@@ -56,6 +57,10 @@ for dr in schedule_data:
     if not dr.get('findAddress'):
         raise ValueError(f"No address found for doctor {dr['findDr']['firstName']}")
     
+    # Ensure findAddress is not empty
+    if not dr['findAddress']:
+        raise ValueError(f"Address list is empty for doctor {dr['findDr']['firstName']}")
+
     # Extract schedules
     schedules = []
     for item in dr.get('findSchedule', []):
@@ -80,6 +85,7 @@ for dr in schedule_data:
         print(f"No valid schedules found for doctor {dr['findDr']['firstName']}. Skipping.")
         continue  # Skip this doctor if no valid schedules are found
     
+    # Ensure findAddress is a non-empty list before accessing it
     doctor_info = {
         "name": dr['findDr']['firstName'],
         "category": dr['findDr']['visit_type'].lower(),
@@ -100,7 +106,6 @@ visit_plan = {}
 # Function to allocate visits with a required day gap
 def allocate_visits_with_gap(category, num_visits, gap):
     doctors = partitions[category]
-    day = 1
     last_visit_day = {}  # Store the last visit day for each doctor
     
     for doctor in doctors:
@@ -152,5 +157,15 @@ response = {
     "data": sorted_visit_plan
 }
 
-# Return the visit plan as a JSON stringhghghgh
-print(json.dumps(response, indent=4))
+# Return the visit plan as a JSON string
+print(json.dumps(response))
+
+
+
+
+
+
+
+
+
+
