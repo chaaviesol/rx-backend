@@ -207,10 +207,6 @@ server.post('/generate-visit-plan', async (req, res) => {
 
 
 
-
-
-
-
 server.listen(3004, () => {
   console.log("server started at http://localhost:3004")
 })
