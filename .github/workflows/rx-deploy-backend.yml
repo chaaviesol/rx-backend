@@ -21,9 +21,11 @@ jobs:
         echo "${SSH_PRIVATE_KEY}" > private_key.pem
         chmod 400 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@52.66.145.37 << 'EOF'
-          cd /home/ec2-user/test || git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/test
-          
-          
+          if [ ! -d "/home/ec2-user/test" ]; then
+            git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/test
+          else
+            cd /home/ec2-user/test && git pull origin main
+          fi
         EOF
 
     - name: Cleanup SSH Key
