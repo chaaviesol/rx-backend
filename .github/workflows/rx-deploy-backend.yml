@@ -21,8 +21,8 @@ jobs:
         echo "${SSH_PRIVATE_KEY}" > private_key.pem
         chmod 400 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@52.66.145.37 << 'EOF'
-          cd /home/ec2-user/Rx_Route || git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/Rx_Route
-          cd /home/ec2-user/Rx_Route
+          cd /home/ec2-user/test || git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/test
+          cd /home/ec2-user/test
           git pull
         EOF
 
