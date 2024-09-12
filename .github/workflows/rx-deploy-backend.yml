@@ -14,14 +14,15 @@ jobs:
     - name: Checkout Backend Code
       uses: actions/checkout@v3
 
-    - name: Clone Backend Repository on EC2
+    - name: Clone or Update Backend Repository on EC2
       env:
         SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
       run: |
         echo "${SSH_PRIVATE_KEY}" > private_key.pem
         chmod 400 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@52.66.145.37 << 'EOF'
-          if [ ! -d "/home/ec2-user/test" ]; then
+          if [ ! -d "/home/ec2-user/test/.git" ]; then
+            rm -rf /home/ec2-user/test # Remove the directory if it's not a valid git repo
             git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/test
           else
             cd /home/ec2-user/test && git pull origin main
