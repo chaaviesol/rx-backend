@@ -139,7 +139,7 @@ server.post('/generate-visit-plan', async (req, res) => {
     //     return res.status(500).send('An error occurred while executing the script.');
     //   }
     // };
-
+ 
     // await runPythonScript();
 
     const scheduleDataPath = path.join(__dirname, 'scheduleData.json');
@@ -172,9 +172,21 @@ server.post('/generate-visit-plan', async (req, res) => {
           // Log the raw stdout for debugging
           console.log(`Python stdout: ${stdout}`);
     
+          // try {
+          //   console.log("Parsing Python script output...");
+          //   const result = JSON.parse(stdout); // Parsing the output
+          //   console.log("Parsed result from Python script:", result);
+          //   resolve(result);
+          // } catch (parseError) {
+          //   console.error(`Error parsing Python output: ${parseError.message}`);
+          //   reject(new Error("Failed to parse Python script output"));
+          // }
+
           try {
+            // Remove any potential extraneous characters or text
+            const cleanedStdout = stdout.trim();
             console.log("Parsing Python script output...");
-            const result = JSON.parse(stdout); // Parsing the output
+            const result = JSON.parse(cleanedStdout); // Parsing the output
             console.log("Parsed result from Python script:", result);
             resolve(result);
           } catch (parseError) {
@@ -185,7 +197,17 @@ server.post('/generate-visit-plan', async (req, res) => {
       });
     };
     
-    const runPythonScript = async (req, res) => {
+    // const runPythonScript = async (req, res) => {
+    //   try {
+    //     const pythonOutput = await executePythonScript();
+    //     // Send response back to client with parsed data
+    //     return res.status(200).json({ data: pythonOutput });
+    //   } catch (error) {
+    //     console.error('Error in runPythonScript:', error);
+    //     return res.status(500).send('An error occurred while executing the script.');
+    //   }
+    // };
+    const runPythonScript = async () => {
       try {
         const pythonOutput = await executePythonScript();
         // Send response back to client with parsed data
@@ -195,11 +217,11 @@ server.post('/generate-visit-plan', async (req, res) => {
         return res.status(500).send('An error occurred while executing the script.');
       }
     };
-    
-    await runPythonScript(req, res); // Make sure you have access to `req` and `res` here
-
+    // await runPythonScript(req, res); // Make sure you have access to `req` and `res` here
+   
+    await runPythonScript();
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.error('An error had occurred:', error);
     return res.status(500).json({ error: true, message: 'An error occurred while generating the visit plan.' });
   }
 });

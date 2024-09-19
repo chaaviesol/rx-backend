@@ -602,7 +602,7 @@ const SubmitAutomaticTp = async(req,res)=>{
         for(let i=0 ; i<data.length ;i++){
          
             const date = Object.keys(data[i])[0]
-            console.log({date})
+            // console.log({date})
           
 
             const doctorList = data[i][date]
@@ -610,7 +610,7 @@ const SubmitAutomaticTp = async(req,res)=>{
              
             for(let j=0 ; j<doctorList.length ; j++){
                const doctors = doctorList[j].doctor
-               console.log({doctors})
+            //    console.log({doctors})
             
 
             const findDoctor = await prisma.doctor_details.findMany({
@@ -620,7 +620,7 @@ const SubmitAutomaticTp = async(req,res)=>{
             })
             console.log({findDoctor})
             const drId =findDoctor[0].id
-            console.log({drId})
+            // console.log({drId})
 
             
             const createDetailedPlan = await prisma.detailedTravelPlan.create({
@@ -633,7 +633,7 @@ const SubmitAutomaticTp = async(req,res)=>{
                     created_date:createdDate
                 }
             })
-            console.log({createDetailedPlan})
+            // console.log({createDetailedPlan})
             createdPlan.push(createDetailedPlan)
         }
         
@@ -641,12 +641,7 @@ const SubmitAutomaticTp = async(req,res)=>{
    
 
 
- res.status(200).json({
-    error:true,
-    success:false,
-    message:"internal server error",
-    
- })
+
         
         res.status(200).json({
         error:true,
@@ -937,7 +932,7 @@ const addedChemist = async(req,res)=>{
             }
         })
         // console.log({findDr})
-        // const chemist = []
+        const chemist = []
         for(let i =0;i<findDr.length;i++){
             const doct_id = findDr[i].id
             console.log({doct_id})
@@ -982,7 +977,7 @@ const addedChemist = async(req,res)=>{
             error:false,
             success:true,
             message:"Successfull",
-            // data:chemist
+            data:chemist
         })
 
     }catch(err){
@@ -1086,10 +1081,128 @@ const resetPassword = async(req,res)=>{
 }
 
 
-//approve travel plan
+const markVisitedData = async(req,res)=>{
+    try{
+        const{dr_id,requesterId,travelPlanid} = req.body
+
+        // const findTravelPlan = await prisma.
+
+    }catch(err){
+        console.log({err})
+        res.status(400).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
+
 const approveTp = async(req,res)=>{
     try{
+        const {travelPlanId, userId} = req.body;
 
+        // Approve the main travel plan
+        const approveTravelPlan = await prisma.travelPlan.update({
+            where: {
+                id: travelPlanId,
+                user_id: userId
+            },
+            data: {
+                status: "Approved"
+            }
+        });
+        console.log({approveTravelPlan});
+
+        // Update status in the detailed travel plans
+        await prisma.detailedTravelPlan.updateMany({
+            where: {
+                travelplan_id: travelPlanId,
+            },
+            data: {
+                status: "Approved"
+            }
+        });
+
+        // Retrieve the updated detailed travel plans
+        const updatedDetailedPlans = await prisma.detailedTravelPlan.findMany({
+            where: {
+                travelplan_id: travelPlanId,
+                status: "Approved"
+            }
+        });
+        console.log({updatedDetailedPlans});
+
+        // Loop through the updated detailed plans
+        for (let i = 0; i < updatedDetailedPlans.length; i++) {
+            const drId = updatedDetailedPlans[i].dr_id;
+            console.log({ drId });
+
+            const userID = updatedDetailedPlans[i].user_id;
+            console.log({ userID });
+
+            // Find user data by user ID
+            const findUserId = await prisma.userData.findMany({
+                where: {
+                    id: userID
+                }
+            });
+            console.log({ findUserId });
+            
+
+            // Uncomment and complete this part if you need to update the visit_record
+            const updateVisitRecord = await prisma.visit_record.updateMany({
+                where: {
+                   requesterUniqueId:findUserId[0].uniqueId
+                },
+                data: {
+                    travel_id:travelPlanId
+                }
+            });
+            console.log({updateVisitRecord})
+        }
+
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "Successful",
+            data: approveTravelPlan
+        });
+
+    } catch (err) {
+        console.log({ err });
+        res.status(400).json({
+            error: true,
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
+
+
+//for deleting travel plan
+const deleteTp = async(req,res)=>{
+    try{
+        const {travelPlanId} = req.body
+
+      
+        const deletedetailed = await prisma.detailedTravelPlan.deleteMany({
+            where:{
+                travelplan_id:travelPlanId
+            }
+        })
+        const deletetp = await prisma.travelPlan.delete({
+            where:{
+                id:travelPlanId
+            }
+        })
+        console.log({deletetp})
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:deletedetailed
+        })
     }catch(err){
         console.log({err})
 
@@ -1099,5 +1212,5 @@ const approveTp = async(req,res)=>{
 
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp
 }

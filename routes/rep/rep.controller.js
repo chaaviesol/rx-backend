@@ -259,6 +259,12 @@ const add_doctor = async (req, res) => {
                }
             })
             console.log({ addVisits })
+
+           
+
+
+
+
             res.status(200).json({
                 error: true,
                 success: false,
@@ -739,13 +745,14 @@ const filter_dr = async (req, res) => {
                         }
                     },
                     {
-                        doc_name: {
+                        firstName: {
                             startsWith: `Dr.${searchData}`,
                             mode: 'insensitive'
                         }
                     }
                 ],
-                status: 'active'
+                status: 'active',
+                approvalStatus:"Accepted"
             }
         });
 

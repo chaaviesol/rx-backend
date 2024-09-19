@@ -193,7 +193,7 @@ model headquarters{
 
 model visit_record{
   id                 Int          @id @default(autoincrement())
-  requesterId        Int?
+  requesterId        Int?  //not needed
   requesterUniqueId  String?
   dr_Id              Int?
   total_visits       Int?
@@ -201,6 +201,7 @@ model visit_record{
   balance_visit      Int?
   date               String?
   dateTime           DateTime?
+  travel_id          Int?
 }
  
  model specialization{
