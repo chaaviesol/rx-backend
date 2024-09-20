@@ -1215,16 +1215,48 @@ const deleteTp = async(req,res)=>{
 const Performance = async(req,res)=>{
     try{
         const{requesterUniqueId,drId,month} = req.body
+     
+      
+        const queryConditions = {
+            requesterUniqueId: requesterUniqueId,
+            dr_Id: drId
+        };
 
-        const findVisitCount = await prisma.visit_record.findMany({
-            where:{
-                requesterUniqueId:requesterUniqueId,
-                dr_Id:drId
-            }
+       
+        if (month) {
+            queryConditions.date = {
+                contains: `-${month}-` 
+            };
+        }
+
+    const findVisitCount = await prisma.visit_record.findMany({
+            where: queryConditions
+        });
+
+        console.log({ findVisitCount });
+        const totalVisit =[]
+        for (let i = 0; i < findVisitCount.length; i++) {
+            const count = findVisitCount[i].visited;
+            const totalVisits = findVisitCount[i].total_visits;
+
+            // Calculate the visited percentage
+            const visitedPercentage = (count / totalVisits) * 100;
+
+            console.log({ count, visitedPercentage });
+
+            // Add the percentage to the totalVisit array
+            totalVisit.push({
+                ...findVisitCount[i],
+                visitedPercentage: visitedPercentage.toFixed(2) // Keeping up to two decimal places
+            });
+        }
+
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:totalVisit
         })
-        console.log({findVisitCount})
-        
-        
 
     }catch(err){
         console.log({err})
@@ -1235,6 +1267,9 @@ const Performance = async(req,res)=>{
         })
     }
 }
+
+
+
 
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
