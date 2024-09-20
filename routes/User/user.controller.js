@@ -1211,6 +1211,32 @@ const deleteTp = async(req,res)=>{
 
 
 
+
+const Performance = async(req,res)=>{
+    try{
+        const{requesterUniqueId,drId,month} = req.body
+
+        const findVisitCount = await prisma.visit_record.findMany({
+            where:{
+                requesterUniqueId:requesterUniqueId,
+                dr_Id:drId
+            }
+        })
+        console.log({findVisitCount})
+        
+        
+
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
+
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance
 }

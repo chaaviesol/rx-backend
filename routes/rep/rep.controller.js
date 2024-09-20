@@ -166,7 +166,7 @@ const login = async (req, res) => {
 const add_doctor = async (req, res) => {
     console.log({req})
     try {
-        const { firstName,lastName,qualification, gender, specialization, mobile, visits, dob, wedding_date,created_UniqueId, latitude, longitude, address,chemist,product,headquarters,area,schedule} = req.body
+        const { firstName,lastName,qualification, gender, specialization, mobile, visits, dob, wedding_date,created_UniqueId,address,chemist,product,headquarters,area,schedule} = req.body
         const date = new Date()
         if (firstName && lastName && qualification && gender && specialization && mobile && visits  && dob && wedding_date && created_UniqueId && address) {
             const visitCategory = categorizeVisitCount(visits);
