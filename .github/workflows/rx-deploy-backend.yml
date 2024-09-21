@@ -25,9 +25,10 @@ jobs:
             rm -rf /home/ec2-user/Rx_Route # Remove the directory if it's not a valid git repo
             git clone https://github.com/chaaviesol/rx-backend.git /home/ec2-user/Rx_Route
           else
-            cd /home/ec2-user/Rx_Route && git pull origin main
+            cd /home/ec2-user/Rx_Route
+            git stash || echo "No changes to stash"
+            git pull origin main
           fi
         EOF
-
     - name: Cleanup SSH Key
       run: rm private_key.pem
