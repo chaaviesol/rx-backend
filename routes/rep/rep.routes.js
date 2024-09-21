@@ -5,7 +5,7 @@ const {rep_registration,login,add_doctor,get_addedDoctors,leaveHistory,single_De
     individual_expenseReport,add_drAddress,total_repCount,total_drCount,search_Rep,add_chemist,get_chemist,delete_chemist,search_chemist,
     edit_chemist,add_product,delete_product,editProduct,get_product,get_headquarters,notifications,searchByDate,search_expenseTable,
     markAsVisited,getVisitReport,singleChemistDetail,visitedDays,getSpecialization,getVisitedDates,getDoctorAddress,checkLocation,visitedDetailsByMonth,createTravelplan,
-    getTravelPlan,changeStatus,cancelTP} = require('./rep.controller')
+    getTravelPlan,changeStatus,cancelTP,markAsVisitedForTp} = require('./rep.controller')
 
 
 repRouter.post('/repRegistration',rep_registration)
@@ -52,5 +52,6 @@ repRouter.post('/createTravelplan',createTravelplan)
 repRouter.post('/getTravelPlan',getTravelPlan)
 repRouter.post('/changeStatus',changeStatus)
 repRouter.post('/cancelTP',cancelTP)
+repRouter.post('/markAsVisitedForTp',markAsVisitedForTp)    
 
 module.exports = repRouter

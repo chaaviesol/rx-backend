@@ -165,6 +165,8 @@ const login = async (req, res) => {
 //add doctor(in use)
 const add_doctor = async (req, res) => {
     console.log({req})
+    console.log(JSON.stringify(req.body.address, null, 2));
+
     try {
         const { firstName,lastName,qualification, gender, specialization, mobile, visits, dob, wedding_date,created_UniqueId,address,chemist,product,headquarters,area,schedule} = req.body
         const date = new Date()
@@ -2709,10 +2711,251 @@ const cancelTP = async(req,res)=>{
         })
     }
 }
+
+
+const markAsVisitedForTp = async(req,res)=>{
+    try{
+        const{reporterUniqueId,reporterId,date,time,products,remark,doctorId,travelid} = req.body
+        const currentDate =new Date()
+       
+
+        const visiteddate = new Date()
+        
+        const formatteddate = formatnewDate(visiteddate);
+        console.log({formatteddate})
+        
+        const markVisited = await prisma.reporting_details.create({
+             data:{
+                unique_reqId:reporterUniqueId,
+                date:date,
+                time:time,
+                products:products,  
+                remarks:remark,
+                rep_id:reporterId,
+                doctor_id:doctorId,
+                datetime:currentDate,
+                visited_date:formatteddate
+             }
+        })
+        console.log({markVisited})
+        const markedDate = markVisited.visited_date
+        console.log({markedDate})
+        // const dateOnly = markedDate.toLocaleDateString(); 
+        // console.log({dateOnly});
+    
+        
+       
+        const visitedId = markVisited.id
+        console.log({visitedId})
+        let visitReport
+        if(date && time){
+            visitReport = await prisma.reporting_details.update({
+                where:{
+                    id:visitedId
+                },
+                data:{
+                    reporting_type:"Offline Reporting"
+                }
+            })
+        }else{
+            visitReport = await prisma.reporting_details.update({
+                where:{
+                    id:visitedId
+                },
+                data:{
+                    reporting_type:"Online Reporting"
+                }
+            })
+        }
+        console.log({visitReport})
+        //get the datetime from the response
+        // const markeddate = new Date(markVisited.datetime)
+        // console.log({markeddate})
+        const markeddate = markVisited.visited_date
+        console.log({markeddate})
+      
+        //for getting the count of lines
+        const countVisits = await prisma.reporting_details.count({
+            where:{
+                unique_reqId:reporterUniqueId,
+                doctor_id:doctorId,
+                visited_date:markeddate
+            }
+        })
+        console.log({countVisits})
+        //getting the number of visits of doctor
+        let getVisitReport = await prisma.doctor_details.findFirst({
+            where:{
+                created_UId:reporterUniqueId,
+                id:doctorId
+            },
+            select:{
+                no_of_visits:true
+            }
+        })
+     
+        console.log({getVisitReport})
+        
+        const visitCount = getVisitReport.no_of_visits
+         console.log({visitCount})
+        //calculating the balance visits
+        const balanceVisit = visitCount-countVisits
+        console.log({balanceVisit})
+        // finding the line which should get update 
+        const findVisitRecord = await prisma.visit_record.findFirst({
+        where:{
+            requesterUniqueId:reporterUniqueId,
+            dr_Id:doctorId,
+            travel_id:travelid
+        }
+        })
+// 
+    
+        console.log({findVisitRecord})
+        const visitID = findVisitRecord.id
+        console.log({visitID})
+        const visitDate = findVisitRecord.date
+        console.log({visitDate})
+        const dateTime = findVisitRecord.dateTime
+        console.log({dateTime})
+        const requester_id = findVisitRecord.requesterId
+        console.log({requester_id})
+        const requesterUniqueId = findVisitRecord.requesterUniqueId
+        console.log({requesterUniqueId})
+        const drId = findVisitRecord.dr_Id
+        console.log({drId})
+        const total_visits=findVisitRecord.total_visits
+        console.log({total_visits})
+        const travelplanID =findVisitRecord.travel_id
+        console.log({travelplanID})
+
+        if(!findVisitRecord){
+            return res.status(404).json({
+                error:true,
+                success:false,
+                message:"No visit record found"
+            })
+        }else{
+           if(visitDate === null){
+            const updateDate = await prisma.visit_record.update({
+                where:{
+                    id:visitID
+                },
+                data:{
+                   date:formatteddate,
+                   dateTime:currentDate
+                }
+            })
+            console.log({updateDate})
+            const updatedate = updateDate.date
+            console.log({updatedate})
+             
+
+            
+           }
+           if(findVisitRecord.balance_visit === 0){
+            return res.status(404).json({
+               error:true,
+               success:false,
+               message:"Balance visit is 0"
+            })
+          }
+           const currentMonth = currentDate.getMonth() + 1  ;
+           console.log({currentMonth})
+           const findexistingVisit = await prisma.visit_record.findMany({
+            where:{
+                id:visitID
+            },
+            select:{
+                date:true
+            }
+           })
+           console.log({findexistingVisit})
+           let theDate=''
+           theDate=findexistingVisit[findexistingVisit.length-1].date;
+           console.log({theDate})
+           const getMonthFromDate = (dateString) => {
+            const dateParts = dateString.split('-');
+            return parseInt(dateParts[1], 10);
+        };
+        
+      
+        theDate= getMonthFromDate(theDate);
+        console.log(theDate); // Output: 7
+
+        
+           console.log({findexistingVisit})
+           if(findexistingVisit.length>0){
+           
+
+            if(currentMonth !== theDate){
+                const addNewDate = await prisma.visit_record.create({
+                    data:{
+                        // id:visitID,
+                        dateTime:currentDate,
+                        date:formatteddate,
+                        requesterId:requester_id,
+                        requesterUniqueId:requesterUniqueId,
+                        dr_Id:drId,
+                        total_visits:total_visits,
+                        visited:1,
+                        balance_visit:balanceVisit,
+                        travel_id:travelplanID
+                    }
+                })
+                console.log({addNewDate})
+                return res.status(200).json({
+                    error:false,
+                    success:true,
+                    message:"Successfull",
+                    data:addNewDate,
+                    updateVisit:addNewDate
+                })
+            }
+           
+          
+          
+        
+        const updateVisit = await prisma.visit_record.update({
+            where:{
+               id:visitID
+            },
+            data:{
+              requesterId:reporterId,
+              visited:countVisits,
+              balance_visit:balanceVisit,
+              dateTime:currentDate
+            }
+        })
+        console.log({updateVisit})  
+          
+        
+        
+       return res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:visitReport,
+            updateVisit:updateVisit
+        })
+ 
+    }
+}
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
+
 module.exports = {
     rep_registration, login, add_doctor, get_addedDoctors, leaveHistory, single_Details, delete_doctor, filter_dr, get_doctorDetail, delete_rep, report_expense,
     individual_expenseReport, add_drAddress, total_repCount, total_drCount, search_Rep, add_chemist, get_chemist, delete_chemist, search_chemist,
     edit_chemist, add_product, delete_product,editProduct, get_product, get_headquarters,notifications,searchByDate,search_expenseTable,
     markAsVisited,getVisitReport,singleChemistDetail,visitedDays,getSpecialization,getVisitedDates,getDoctorAddress,checkLocation,visitedDetailsByMonth,createTravelplan,
-    getTravelPlan,changeStatus,cancelTP
+    getTravelPlan,changeStatus,cancelTP,markAsVisitedForTp
 }

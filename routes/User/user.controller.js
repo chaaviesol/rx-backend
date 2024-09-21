@@ -1098,86 +1098,100 @@ const markVisitedData = async(req,res)=>{
 }
 
 
-const approveTp = async(req,res)=>{
-    try{
-        const {travelPlanId, userId} = req.body;
+// const approveTp = async(req,res)=>{
+//     try{
+//         const {travelPlanId, userId} = req.body;
+//         const date = new Date()
+//         // Approve the main travel plan
+//         const approveTravelPlan = await prisma.travelPlan.update({
+//             where: {
+//                 id: travelPlanId,
+//                 user_id: userId
+//             },
+//             data: {
+//                 status: "Approved"
+//             }
+//         });
+//         console.log({approveTravelPlan});
 
-        // Approve the main travel plan
-        const approveTravelPlan = await prisma.travelPlan.update({
-            where: {
-                id: travelPlanId,
-                user_id: userId
-            },
-            data: {
-                status: "Approved"
-            }
-        });
-        console.log({approveTravelPlan});
+//         // Update status in the detailed travel plans
+//         await prisma.detailedTravelPlan.updateMany({
+//             where: {
+//                 travelplan_id: travelPlanId,
+//             },
+//             data: {
+//                 status: "Approved"
+//             }
+//         });
 
-        // Update status in the detailed travel plans
-        await prisma.detailedTravelPlan.updateMany({
-            where: {
-                travelplan_id: travelPlanId,
-            },
-            data: {
-                status: "Approved"
-            }
-        });
+//         // Retrieve the updated detailed travel plans
+//         const updatedDetailedPlans = await prisma.detailedTravelPlan.findMany({
+//             where: {
+//                 travelplan_id: travelPlanId,
+//                 status: "Approved"
+//             }
+//         });
+//         console.log({updatedDetailedPlans});
 
-        // Retrieve the updated detailed travel plans
-        const updatedDetailedPlans = await prisma.detailedTravelPlan.findMany({
-            where: {
-                travelplan_id: travelPlanId,
-                status: "Approved"
-            }
-        });
-        console.log({updatedDetailedPlans});
+        
+//         for (let i = 0; i < updatedDetailedPlans.length; i++) {
+//             const drId = updatedDetailedPlans[i].dr_id;
+//             console.log({ drId });
+//             //get doctor details
+//             const findDetails = await prisma.doctor_details.findMany({
+//               where:{
+//                 id:drId 
+//               },
+//               select:{
+//                 id:true,
+//                 no_of_visits:true
+//               }
+//             })
+//             console.log({findDetails})
+//             const userID = updatedDetailedPlans[i].user_id;
+//             console.log({ userID });
 
-        // Loop through the updated detailed plans
-        for (let i = 0; i < updatedDetailedPlans.length; i++) {
-            const drId = updatedDetailedPlans[i].dr_id;
-            console.log({ drId });
-
-            const userID = updatedDetailedPlans[i].user_id;
-            console.log({ userID });
-
-            // Find user data by user ID
-            const findUserId = await prisma.userData.findMany({
-                where: {
-                    id: userID
-                }
-            });
-            console.log({ findUserId });
+//             // Find user data by user ID
+//             const findUserId = await prisma.userData.findMany({
+//                 where: {
+//                     id: userID
+//                 }
+//             });
+//             console.log({ findUserId });
             
 
-            // Uncomment and complete this part if you need to update the visit_record
-            const updateVisitRecord = await prisma.visit_record.updateMany({
-                where: {
-                   requesterUniqueId:findUserId[0].uniqueId
-                },
-                data: {
-                    travel_id:travelPlanId
-                }
-            });
-            console.log({updateVisitRecord})
-        }
+         
 
-        res.status(200).json({
-            error: false,
-            success: true,
-            message: "Successful",
-            data: approveTravelPlan
-        });
 
-    } catch (err) {
-        console.log({ err });
-        res.status(400).json({
-            error: true,
-            success: false,
-            message: "Internal server error"
-        });
-    }
-};
+//             //create line with travel plan id
+//             const addVisitRecord = await prisma.visit_record.createMany({
+//                 data:{
+//                     requesterUniqueId:findUserId[0].uniqueId,
+//                     dr_Id:drId,
+//                     total_visits:findDetails[0].no_of_visits,
+//                     dateTime:date,
+//                     travel_id:travelPlanId
+//                 }
+//             })
+//             console.log({addVisitRecord})
+//         }
+
+//         res.status(200).json({
+//             error: false,
+//             success: true,
+//             message: "Successful",
+//             data: approveTravelPlan
+//         });
+
+//     } catch (err) {
+//         console.log({ err });
+//         res.status(400).json({
+//             error: true,
+//             success: false,
+//             message: "Internal server error"
+//         });
+//     }
+// };
 
 
 //for deleting travel plan
@@ -1209,6 +1223,109 @@ const deleteTp = async(req,res)=>{
     }
 }
 
+const approveTp = async (req, res) => {
+    try {
+        const { travelPlanId, userId } = req.body;
+        const date = new Date();
+
+        // Approve the main travel plan
+        const approveTravelPlan = await prisma.travelPlan.update({
+            where: {
+                id: travelPlanId,
+                user_id: userId
+            },
+            data: {
+                status: "Approved"
+            }
+        });
+        console.log({ approveTravelPlan });
+
+        // Update status in the detailed travel plans
+        await prisma.detailedTravelPlan.updateMany({
+            where: {
+                travelplan_id: travelPlanId,
+            },
+            data: {
+                status: "Approved"
+            }
+        });
+
+        // Retrieve the updated detailed travel plans
+        const updatedDetailedPlans = await prisma.detailedTravelPlan.findMany({
+            where: {
+                travelplan_id: travelPlanId,
+                status: "Approved"
+            }
+        });
+        console.log({ updatedDetailedPlans });
+
+        for (let i = 0; i < updatedDetailedPlans.length; i++) {
+            const drId = updatedDetailedPlans[i].dr_id;
+            console.log({ drId });
+            const userID = updatedDetailedPlans[i].user_id;
+            console.log({ userID });
+
+            // Get doctor details
+            const findDetails = await prisma.doctor_details.findFirst({
+                where: {
+                    id: drId
+                },
+                select: {
+                    id: true,
+                    no_of_visits: true
+                }
+            });
+            console.log({ findDetails });
+
+            // Find user data by user ID
+            const findUserId = await prisma.userData.findFirst({
+                where: {
+                    id: userID
+                }
+            });
+            console.log({ findUserId });
+
+            // **Check if a visit record already exists for this doctor and travel plan**
+            const existingVisitRecord = await prisma.visit_record.findFirst({
+                where: {
+                    dr_Id: drId,
+                    travel_id: travelPlanId
+                }
+            });
+
+            // If no record exists, create a new visit record
+            if (!existingVisitRecord) {
+                const addVisitRecord = await prisma.visit_record.create({
+                    data: {
+                        requesterUniqueId: findUserId.uniqueId,
+                        dr_Id: drId,
+                        total_visits: findDetails.no_of_visits,
+                        dateTime: date,
+                        travel_id: travelPlanId
+                    }
+                });
+                console.log({ addVisitRecord });
+            } else {
+                console.log(`Visit record for doctor ID ${drId} and travel plan ${travelPlanId} already exists.`);
+            }
+        }
+
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "Successful",
+            data: approveTravelPlan
+        });
+
+    } catch (err) {
+        console.log({ err });
+        res.status(400).json({
+            error: true,
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
 
 
 
@@ -1268,10 +1385,62 @@ const Performance = async(req,res)=>{
     }
 }
 
+const userPerformance = async(req,res)=>{
+    try{
+        const{requesterUniqueId} = req.body
+     
+      
+         const findVisitCount = await prisma.visit_record.findMany({
+            where: {
+                requesterUniqueId: requesterUniqueId,
+              
+            }
+        });
+        console.log({findVisitCount})
+        const totalVisit =[]
+        for (let i = 0; i < findVisitCount.length; i++) {
+            const count = findVisitCount[i].visited;
+            const totalVisits = findVisitCount[i].total_visits;
+            const drId = findVisitCount[i].dr_Id
 
+            const findDrDetails = await prisma.doctor_details.findMany({
+                where:{
+                    id:drId
+                }
+            })
+            console.log({findDrDetails})
+            // Calculate the visited percentage
+            const visitedPercentage = (count / totalVisits) * 100;
+
+            console.log({ count, visitedPercentage });
+
+            // Add the percentage to the totalVisit array
+            totalVisit.push({
+                ...findVisitCount[i],
+                visitedPercentage: visitedPercentage.toFixed(2) ,
+                doctorDetails:findDrDetails
+            });
+        }
+
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:totalVisit
+        })
+
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
 
 
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance
 }
