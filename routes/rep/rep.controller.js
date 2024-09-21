@@ -2712,7 +2712,7 @@ const cancelTP = async(req,res)=>{
     }
 }
 
-
+//api for markasvisited
 const markAsVisitedForTp = async(req,res)=>{
     try{
         const{reporterUniqueId,reporterId,date,time,products,remark,doctorId,travelid} = req.body
