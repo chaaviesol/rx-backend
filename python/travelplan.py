@@ -82,7 +82,7 @@ for dr in schedule_data:
     
     # Validate schedules
     if not schedules:
-        print(f"No valid schedules found for doctor {dr['findDr']['firstName']}. Skipping.")
+        # print(f"No valid schedules found for doctor {dr['findDr']['firstName']}. Skipping.")
         continue  # Skip this doctor if no valid schedules are found
     
     # Ensure findAddress is a non-empty list before accessing it

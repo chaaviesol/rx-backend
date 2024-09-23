@@ -844,11 +844,33 @@ const userAddedTP = async (req,res)=>{
             }
         })
         console.log({getUserAddedTp})
+        const userData = []
+        for (let i=0; i<getUserAddedTp.length ;i++){
+              
+              const userId = getUserAddedTp[i].user_id
+              console.log({userId})
+
+              const userdata = await prisma.userData.findMany({
+                where:{
+                    id:userId
+                },
+                select:{
+                    id:true,
+                    uniqueId:true,
+                    name:true
+                }
+              })
+              console.log({userdata})
+              userData.push({
+                ...getUserAddedTp[i],
+                userdetails:userdata
+              })
+        }
         res.status(200).json({
             error:false,
             success:true,
             message:"Successfull",
-            data:getUserAddedTp
+            data:userData
         })
 
 
@@ -1439,8 +1461,97 @@ const userPerformance = async(req,res)=>{
     }
 }
 
+//api for reject tp
+const rejectTp = async(req,res)=>{
+    try{
+        const{travelPlanId} = req.body
+        const rejectPlan = await prisma.travelPlan.update({
+            where:{
+                id:travelPlanId
+            },
+            data:{
+                status:"Rejected"
+            }
+        })
+        console.log({rejectPlan})
+        const rejectDetailedPlan = await prisma.detailedTravelPlan.updateMany({
+            where:{
+             travelplan_id:travelPlanId
+            },
+            data:{
+                status:"Rejected"
+            }
+        })
+        console.log({rejectDetailedPlan})
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:rejectDetailedPlan
+        })
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"internal server error"
+        })
+    }
+}
 
+
+const visitedCount = async(req,res)=>{
+    try{
+        const {userId} = req.body
+        const userVisitedData = await prisma.doctor_details.findMany({
+            where:{
+                created_UId:userId
+            }
+        })
+        // console.log({userVisitedData})
+        let total = 0
+        let totalvisits = 0
+        for(let i=0; i<userVisitedData.length; i++){
+            const visitCount = userVisitedData[i].no_of_visits ||0
+            // console.log({visitCount})
+            total+=visitCount
+            // totalvisits.push(total)
+        }
+            const findVistedCount = await prisma.visit_record.findMany({
+                where:{
+                    requesterUniqueId:userId
+                },
+                select:{
+                    id:true,
+                    visited:true
+                }
+            })
+            console.log({findVistedCount})
+            for (let i = 0; i < findVistedCount.length; i++) {
+                const visited = findVistedCount[i].visited || 0; // Handle null/undefined
+                console.log({visited})
+                totalvisits += visited;
+            }
+        const missedVisit = total - totalvisits
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:total,
+            visited :totalvisits,
+            missedVisit : missedVisit
+        })
+
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:'Internal server error'
+        })
+    }
+}
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount
 }
