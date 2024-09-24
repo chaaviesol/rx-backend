@@ -153,7 +153,7 @@ server.post('/generate-visit-plan', async (req, res) => {
       return new Promise((resolve, reject) => {
         // Ensure the Python command is cross-platform friendly
         const pythonScriptPath = path.join(__dirname, 'python', 'travelplan.py');
-        const command = `python "${pythonScriptPath}" "${scheduleDataPath}"`;
+        const command = `python3 "${pythonScriptPath}" "${scheduleDataPath}"`;
     
         console.log(`Executing command: ${command}`);
     
