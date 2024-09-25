@@ -98,7 +98,7 @@ const get_Replist = async(req,res)=>{
             return res.status(404).json({
                 error:true,
                 success:false,
-                message:"Provided Invalid ID"
+                message:"NO DATA FOUND"
             })
         }
         res.status(200).json({
