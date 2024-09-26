@@ -207,6 +207,7 @@ model visit_record{
  model specialization{
   id              Int      @id @default(autoincrement())
   department      String?
+  createdDate     DateTime?
  }
 
  model travelPlan {

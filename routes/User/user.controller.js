@@ -1557,8 +1557,8 @@ const visitedCount = async(req,res)=>{
 
 const addAddress = async(req,res)=>{
     try{
-        const {doc_id,address,userId,chemist,product} = req.body
-
+        const {doc_id,address,userId,chemist,product,headquarters,area} = req.body
+        const date = new Date()
         const add_drAddress = await prisma.doctor_address.create({
             data: {
                 doc_id: doc_id,
@@ -1570,6 +1570,40 @@ const addAddress = async(req,res)=>{
             }
         })
         console.log({add_drAddress})
+        const getId = add_drAddress.id
+        console.log({getId})
+        const getHeadquaters= await prisma.headquarters.findMany({
+            where:{
+              headquarter_name:headquarters,
+              sub_headquarter:area
+            }
+
+        })
+        console.log({getHeadquaters})
+        const headquarterId = getHeadquaters.id
+        console.log({headquarterId})
+        const addSchedule = await prisma.schedule.create({
+            data:{
+               dr_id:doc_id,
+               user_id:userId,
+               schedule:schedule,
+               createdDate:date,
+               addressId:getId
+            }
+       })
+       console.log(addSchedule)
+       const add_addressID = await prisma.doctor_details.update({
+        where: {
+            id: doc_id
+        },
+        data: {
+            address_id: getId,
+            headquaters:headquarterId,
+            scheduleData:scheduleId 
+        }
+    })
+    console.log({ add_addressID })
+
     }catch(err){
         console.log({err})
         res.status(404).json({
