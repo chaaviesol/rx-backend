@@ -87,7 +87,8 @@ for dr in schedule_data:
     
     # Ensure findAddress is a non-empty list before accessing it
     doctor_info = {
-        "name": dr['findDr']['firstName'],
+        # "name": dr['findDr']['firstName'],
+        "name": f"{dr['findDr']['firstName']} {dr['findDr']['lastName']}",
         "category": dr['findDr']['visit_type'].lower(),
         "address": dr['findAddress'][0]['address'],
         "schedule": schedules

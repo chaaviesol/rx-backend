@@ -2,594 +2,904 @@
   "scheduleData": [
     {
       "findDr": {
-        "id": 133,
-        "firstName": "Dr.Neha",
-        "created_UId": "GIK771",
+        "id": 147,
+        "firstName": "Biju",
+        "lastName": "doc3",
+        "created_UId": "BIJ490",
         "visit_type": "supercore"
       },
       "findAddress": [
         {
-          "id": 168,
-          "doc_id": 133,
-          "userId": "GIK771",
+          "id": 185,
+          "doc_id": 147,
+          "userId": "BIJ490",
           "address": {
-            "address": "akhil house kozhikode"
+            "address": "Near BJ Medicals",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "4:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tueday",
+                "end_time": "4:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Wednesday",
+                "end_time": "4:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Thursday",
+                "end_time": "6:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "west hill"
           },
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 33,
-          "dr_id": 133,
-          "user_id": "GIK771",
+          "id": 47,
+          "dr_id": 147,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "wenesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "monday",
+            "end_time": "4:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 168,
-          "createdDate": "2024-09-19T05:24:48.172Z"
+          "addressId": 185,
+          "createdDate": "2024-09-25T02:47:47.992Z"
         },
         {
-          "id": 34,
-          "dr_id": 133,
-          "user_id": "GIK771",
+          "id": 48,
+          "dr_id": 147,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "monday",
+            "end_time": "4:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 168,
-          "createdDate": "2024-09-19T05:24:48.172Z"
+          "addressId": 185,
+          "createdDate": "2024-09-25T02:47:47.992Z"
+        },
+        {
+          "id": 49,
+          "dr_id": 147,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "thursday",
+            "endTime": "6:00 PM",
+            "startTime": "10:00 AM"
+          },
+          "addressId": 185,
+          "createdDate": "2024-09-25T02:47:47.992Z"
+        },
+        {
+          "id": 46,
+          "dr_id": 147,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "4:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 185,
+          "createdDate": "2024-09-25T02:47:47.992Z"
         }
       ]
     },
     {
       "findDr": {
-        "id": 126,
-        "firstName": "Dr.Arya",
-        "created_UId": "GIK771",
-        "visit_type": "core"
-      },
-      "findAddress": [
-        {
-          "id": 160,
-          "doc_id": 126,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2600489",
-            "longitude": "75.7900391"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 18,
-          "dr_id": 126,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-12T10:53:57.362Z"
-        },
-        {
-          "id": 17,
-          "dr_id": 126,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-12T10:53:57.362Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 121,
-        "firstName": "Dr.Aswin",
-        "created_UId": "GIK771",
-        "visit_type": "core"
-      },
-      "findAddress": [
-        {
-          "id": 155,
-          "doc_id": 121,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2757286",
-            "longitude": "75.7779643"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 6,
-          "dr_id": 121,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-07T07:35:58.414Z"
-        },
-        {
-          "id": 5,
-          "dr_id": 121,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-07T07:35:58.414Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 124,
-        "firstName": "Dr.Abhishekha",
-        "created_UId": "GIK771",
+        "id": 154,
+        "firstName": "Biju",
+        "lastName": "doc10",
+        "created_UId": "BIJ490",
         "visit_type": "important"
       },
       "findAddress": [
         {
-          "id": 158,
-          "doc_id": 124,
-          "userId": "GIK771",
+          "id": 193,
+          "doc_id": 154,
+          "userId": "BIJ490",
           "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2600489",
-            "longitude": "75.7900391"
+            "address": "West hill 1",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "west hill"
+          },
+          "area": null
+        },
+        {
+          "id": 192,
+          "doc_id": 154,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Vellayil 1",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "vellayil"
           },
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 9,
-          "dr_id": 124,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "saturday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:41:28.683Z"
-        },
-        {
-          "id": 10,
-          "dr_id": 124,
-          "user_id": "GIK771",
+          "id": 66,
+          "dr_id": 154,
+          "user_id": "BIJ490",
           "schedule": {
             "day": "monday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:41:28.683Z"
+          "addressId": 192,
+          "createdDate": "2024-09-25T03:41:16.902Z"
         },
         {
-          "id": 11,
-          "dr_id": 124,
-          "user_id": "GIK771",
+          "id": 68,
+          "dr_id": 154,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 192,
+          "createdDate": "2024-09-25T03:41:16.902Z"
+        },
+        {
+          "id": 67,
+          "dr_id": 154,
+          "user_id": "BIJ490",
           "schedule": {
             "day": "tuesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:41:28.683Z"
+          "addressId": 192,
+          "createdDate": "2024-09-25T03:41:16.902Z"
         },
         {
-          "id": 12,
-          "dr_id": 124,
-          "user_id": "GIK771",
+          "id": 69,
+          "dr_id": 154,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "tuesday",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:41:28.683Z"
+          "addressId": 192,
+          "createdDate": "2024-09-25T03:41:16.902Z"
         }
       ]
     },
     {
       "findDr": {
-        "id": 130,
-        "firstName": "Dr.Santi",
-        "created_UId": "GIK771",
+        "id": 155,
+        "firstName": "Biju",
+        "lastName": "doc11",
+        "created_UId": "BIJ490",
+        "visit_type": "important"
+      },
+      "findAddress": [
+        {
+          "id": 194,
+          "doc_id": 155,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Vellayil 1",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "12:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "12:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "vellayil"
+          },
+          "area": null
+        },
+        {
+          "id": 195,
+          "doc_id": 155,
+          "userId": "BIJ490",
+          "address": {
+            "address": "west hill 1",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "6:00 PM",
+                "start_time": "12:00 PM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "6:00 PM",
+                "start_time": "12:00 PM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "west hill"
+          },
+          "area": null
+        }
+      ],
+      "findSchedule": [
+        {
+          "id": 73,
+          "dr_id": 155,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "6:00 PM",
+            "start_time": "12:00 PM"
+          },
+          "addressId": 194,
+          "createdDate": "2024-09-25T05:44:38.432Z"
+        },
+        {
+          "id": 70,
+          "dr_id": 155,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "12:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 194,
+          "createdDate": "2024-09-25T05:44:38.432Z"
+        },
+        {
+          "id": 72,
+          "dr_id": 155,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "6:00 PM",
+            "start_time": "12:00 PM"
+          },
+          "addressId": 194,
+          "createdDate": "2024-09-25T05:44:38.432Z"
+        },
+        {
+          "id": 71,
+          "dr_id": 155,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "12:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 194,
+          "createdDate": "2024-09-25T05:44:38.432Z"
+        }
+      ]
+    },
+    {
+      "findDr": {
+        "id": 146,
+        "firstName": "Biju",
+        "lastName": "doc2",
+        "created_UId": "BIJ490",
         "visit_type": "core"
       },
       "findAddress": [
         {
-          "id": 164,
-          "doc_id": 130,
-          "userId": "GIK771",
+          "id": 184,
+          "doc_id": 146,
+          "userId": "BIJ490",
           "address": {
-            "address": "ashok house kozhikode"
+            "address": "Near Nadakkavu",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Wednesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "west hill"
           },
-          "area": null
-        },
-        {
-          "id": 165,
-          "doc_id": 130,
-          "userId": "GIK771",
-          "address": [
-            {
-              "address": "Pallivasal, Pudukkottai (South)",
-              "latitude": "10.1915116",
-              "longitude": "78.6951021"
-            }
-          ],
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 24,
-          "dr_id": 130,
-          "user_id": "GIK771",
+          "id": 43,
+          "dr_id": 146,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "wenesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "monday",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 164,
-          "createdDate": "2024-08-30T05:57:03.732Z"
+          "addressId": 184,
+          "createdDate": "2024-09-25T02:43:39.672Z"
+        },
+        {
+          "id": 44,
+          "dr_id": 146,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 184,
+          "createdDate": "2024-09-25T02:43:39.672Z"
+        },
+        {
+          "id": 45,
+          "dr_id": 146,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 184,
+          "createdDate": "2024-09-25T02:43:39.672Z"
         }
       ]
     },
     {
       "findDr": {
-        "id": 118,
-        "firstName": "Dr.Anusree",
-        "created_UId": "GIK771",
-        "visit_type": "supercore"
+        "id": 151,
+        "firstName": "Biju",
+        "lastName": "doc7",
+        "created_UId": "BIJ490",
+        "visit_type": "core"
       },
       "findAddress": [
         {
-          "id": 152,
-          "doc_id": 118,
-          "userId": "GIK771",
+          "id": 189,
+          "doc_id": 151,
+          "userId": "BIJ490",
           "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2732268",
-            "longitude": "75.7720265"
+            "address": "Near Railway",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "12:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "vellayil"
           },
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 3,
-          "dr_id": 118,
-          "user_id": "GIK771",
+          "id": 61,
+          "dr_id": 151,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "monday",
+            "end_time": "12:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": null,
-          "createdDate": "2024-08-07T07:30:51.135Z"
+          "addressId": 189,
+          "createdDate": "2024-09-25T03:08:26.772Z"
         }
       ]
     },
     {
       "findDr": {
-        "id": 119,
-        "firstName": "Dr.Akhil",
-        "created_UId": "GIK771",
+        "id": 145,
+        "firstName": "Biju",
+        "lastName": "Doc1",
+        "created_UId": "BIJ490",
         "visit_type": "important"
       },
       "findAddress": [
         {
-          "id": 153,
-          "doc_id": 119,
-          "userId": "GIK771",
+          "id": 183,
+          "doc_id": 145,
+          "userId": "BIJ490",
           "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2732268",
-            "longitude": "75.7720265"
+            "address": "Near Railway Station",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Wednesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "west hill"
           },
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 4,
-          "dr_id": 119,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-07T07:32:17.919Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 132,
-        "firstName": "Dr.Sathyan",
-        "created_UId": "GIK771",
-        "visit_type": "supercore"
-      },
-      "findAddress": [
-        {
-          "id": 167,
-          "doc_id": 132,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 29,
-          "dr_id": 132,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 167,
-          "createdDate": "2024-09-08T12:09:14.972Z"
-        },
-        {
-          "id": 30,
-          "dr_id": 132,
-          "user_id": "GIK771",
+          "id": 40,
+          "dr_id": 145,
+          "user_id": "BIJ490",
           "schedule": {
             "day": "monday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 167,
-          "createdDate": "2024-09-08T12:09:14.972Z"
+          "addressId": 183,
+          "createdDate": "2024-09-25T02:01:24.462Z"
         },
         {
-          "id": 31,
-          "dr_id": 132,
-          "user_id": "GIK771",
+          "id": 41,
+          "dr_id": 145,
+          "user_id": "BIJ490",
           "schedule": {
             "day": "tuesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 167,
-          "createdDate": "2024-09-08T12:09:14.972Z"
+          "addressId": 183,
+          "createdDate": "2024-09-25T02:01:24.462Z"
         },
         {
-          "id": 32,
-          "dr_id": 132,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "saturday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 167,
-          "createdDate": "2024-09-08T12:09:14.972Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 127,
-        "firstName": "Dr.Arpitha",
-        "created_UId": "GIK771",
-        "visit_type": "supercore"
-      },
-      "findAddress": [
-        {
-          "id": 161,
-          "doc_id": 127,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2600489",
-            "longitude": "75.7900391"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 20,
-          "dr_id": 127,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 161,
-          "createdDate": "2024-08-12T10:58:14.219Z"
-        },
-        {
-          "id": 19,
-          "dr_id": 127,
-          "user_id": "GIK771",
+          "id": 42,
+          "dr_id": 145,
+          "user_id": "BIJ490",
           "schedule": {
             "day": "wednesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
           },
-          "addressId": 161,
-          "createdDate": "2024-08-12T10:58:14.219Z"
-        },
-        {
-          "id": 21,
-          "dr_id": 127,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "saturday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 161,
-          "createdDate": "2024-08-12T11:16:54.572Z"
+          "addressId": 183,
+          "createdDate": "2024-09-25T02:01:24.462Z"
         }
       ]
     },
     {
       "findDr": {
-        "id": 131,
-        "firstName": "Dr.Suman",
-        "created_UId": "GIK771",
-        "visit_type": "supercore"
-      },
-      "findAddress": [
-        {
-          "id": 166,
-          "doc_id": 131,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 25,
-          "dr_id": 131,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 166,
-          "createdDate": "2024-09-08T12:04:26.352Z"
-        },
-        {
-          "id": 26,
-          "dr_id": 131,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "monday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 166,
-          "createdDate": "2024-09-08T12:04:26.352Z"
-        },
-        {
-          "id": 27,
-          "dr_id": 131,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "tuesday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 166,
-          "createdDate": "2024-09-08T12:04:26.352Z"
-        },
-        {
-          "id": 28,
-          "dr_id": 131,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "saturday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": 166,
-          "createdDate": "2024-09-08T12:04:26.352Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 122,
-        "firstName": "Dr.Musthafa",
-        "created_UId": "GIK771",
-        "visit_type": "supercore"
-      },
-      "findAddress": [
-        {
-          "id": 156,
-          "doc_id": 122,
-          "userId": "GIK771",
-          "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2757286",
-            "longitude": "75.7779643"
-          },
-          "area": null
-        }
-      ],
-      "findSchedule": [
-        {
-          "id": 7,
-          "dr_id": 122,
-          "user_id": "GIK771",
-          "schedule": {
-            "day": "friday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
-          },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:08:49.962Z"
-        }
-      ]
-    },
-    {
-      "findDr": {
-        "id": 123,
-        "firstName": "Dr.Gikhin",
-        "created_UId": "GIK771",
+        "id": 148,
+        "firstName": "Biju",
+        "lastName": "doc4",
+        "created_UId": "BIJ490",
         "visit_type": "important"
       },
       "findAddress": [
         {
-          "id": 157,
-          "doc_id": 123,
-          "userId": "GIK771",
+          "id": 186,
+          "doc_id": 148,
+          "userId": "BIJ490",
           "address": {
-            "address": "ashok house kozhikode",
-            "latitude": "11.2757286",
-            "longitude": "75.7779643"
+            "address": "Est Nadakkavu",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "11:00 AM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "11:00 AM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Wednesday",
+                "end_time": "11:00 AM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Thursday",
+                "end_time": "11:00 AM",
+                "start_time": "10:24 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "Nadakkave"
           },
           "area": null
         }
       ],
       "findSchedule": [
         {
-          "id": 8,
-          "dr_id": 123,
-          "user_id": "GIK771",
+          "id": 50,
+          "dr_id": 148,
+          "user_id": "BIJ490",
           "schedule": {
-            "day": "saturday",
-            "end_time": "2:00 am",
-            "start_time": "10:00 am"
+            "day": "monday",
+            "end_time": "11:00 AM",
+            "start_time": "10:00 AM"
           },
-          "addressId": null,
-          "createdDate": "2024-08-10T07:09:40.052Z"
+          "addressId": 186,
+          "createdDate": "2024-09-25T02:56:26.492Z"
+        },
+        {
+          "id": 51,
+          "dr_id": 148,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "11:00 AM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 186,
+          "createdDate": "2024-09-25T02:56:26.492Z"
+        },
+        {
+          "id": 52,
+          "dr_id": 148,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "wednesday",
+            "end_time": "11:00 AM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 186,
+          "createdDate": "2024-09-25T02:56:26.492Z"
+        },
+        {
+          "id": 53,
+          "dr_id": 148,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "thursday",
+            "end_time": "11:00 AM",
+            "start_time": "10:24 AM"
+          },
+          "addressId": 186,
+          "createdDate": "2024-09-25T02:56:26.492Z"
+        }
+      ]
+    },
+    {
+      "findDr": {
+        "id": 149,
+        "firstName": "Biju",
+        "lastName": "doc5",
+        "created_UId": "BIJ490",
+        "visit_type": "supercore"
+      },
+      "findAddress": [
+        {
+          "id": 187,
+          "doc_id": 149,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Kottaram Road",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "10:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "10:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Wednesday",
+                "end_time": "5:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Thursday",
+                "end_time": "10:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Friday",
+                "end_time": "10:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "Nadakkave"
+          },
+          "area": null
+        }
+      ],
+      "findSchedule": [
+        {
+          "id": 58,
+          "dr_id": 149,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "friday",
+            "end_time": "10:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 187,
+          "createdDate": "2024-09-25T03:02:28.882Z"
+        },
+        {
+          "id": 56,
+          "dr_id": 149,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "Wed",
+            "end_time": "5:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 187,
+          "createdDate": "2024-09-25T03:02:28.882Z"
+        },
+        {
+          "id": 54,
+          "dr_id": 149,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "10:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 187,
+          "createdDate": "2024-09-25T03:02:28.882Z"
+        },
+        {
+          "id": 57,
+          "dr_id": 149,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "thursday",
+            "end_time": "10:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 187,
+          "createdDate": "2024-09-25T03:02:28.882Z"
+        },
+        {
+          "id": 55,
+          "dr_id": 149,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "10:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 187,
+          "createdDate": "2024-09-25T03:02:28.882Z"
+        }
+      ]
+    },
+    {
+      "findDr": {
+        "id": 150,
+        "firstName": "Biju",
+        "lastName": "doc6",
+        "created_UId": "BIJ490",
+        "visit_type": "core"
+      },
+      "findAddress": [
+        {
+          "id": 188,
+          "doc_id": 150,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Nadakkav Junction",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "12:00 PM",
+                "start_time": "10:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "12:00 PM",
+                "start_time": "10:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "Nadakkave"
+          },
+          "area": null
+        }
+      ],
+      "findSchedule": [
+        {
+          "id": 59,
+          "dr_id": 150,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "12:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 188,
+          "createdDate": "2024-09-25T03:05:54.192Z"
+        },
+        {
+          "id": 60,
+          "dr_id": 150,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "12:00 PM",
+            "start_time": "10:00 AM"
+          },
+          "addressId": 188,
+          "createdDate": "2024-09-25T03:05:54.192Z"
+        }
+      ]
+    },
+    {
+      "findDr": {
+        "id": 152,
+        "firstName": "Biju",
+        "lastName": "doc8",
+        "created_UId": "BIJ490",
+        "visit_type": "supercore"
+      },
+      "findAddress": [
+        {
+          "id": 190,
+          "doc_id": 152,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Vellayil 2",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "end_time": "12:30 PM",
+                "start_time": "9:30 AM"
+              },
+              {
+                "day": "Tuesday",
+                "end_time": "8:40 PM",
+                "start_time": "9:30 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "vellayil"
+          },
+          "area": null
+        }
+      ],
+      "findSchedule": [
+        {
+          "id": 62,
+          "dr_id": 152,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "12:30 PM",
+            "start_time": "9:30 AM"
+          },
+          "addressId": 190,
+          "createdDate": "2024-09-25T03:11:15.592Z"
+        },
+        {
+          "id": 63,
+          "dr_id": 152,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "8:40 PM",
+            "start_time": "9:30 AM"
+          },
+          "addressId": 190,
+          "createdDate": "2024-09-25T03:11:15.592Z"
+        }
+      ]
+    },
+    {
+      "findDr": {
+        "id": 153,
+        "firstName": "Biju",
+        "lastName": "doc9",
+        "created_UId": "BIJ490",
+        "visit_type": "important"
+      },
+      "findAddress": [
+        {
+          "id": 191,
+          "doc_id": 153,
+          "userId": "BIJ490",
+          "address": {
+            "address": "Vellayil 3",
+            "latitude": "37.4219983",
+            "schedule": [
+              {
+                "day": "Monday",
+                "endTime": "12:00 PM",
+                "startTime": "12:00 AM"
+              },
+              {
+                "day": "Tuesday",
+                "endTime": "12:00 PM",
+                "startTime": "12:00 AM"
+              }
+            ],
+            "longitude": "-122.084",
+            "subHeadQuarter": "vellayil"
+          },
+          "area": null
+        }
+      ],
+      "findSchedule": [
+        {
+          "id": 64,
+          "dr_id": 153,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "monday",
+            "end_time": "12:00 PM",
+            "start_time": "12:00 AM"
+          },
+          "addressId": 191,
+          "createdDate": "2024-09-25T03:18:28.632Z"
+        },
+        {
+          "id": 65,
+          "dr_id": 153,
+          "user_id": "BIJ490",
+          "schedule": {
+            "day": "tuesday",
+            "end_time": "12:00 AM",
+            "start_time": "12:00 PM"
+          },
+          "addressId": 191,
+          "createdDate": "2024-09-25T03:18:28.632Z"
         }
       ]
     }

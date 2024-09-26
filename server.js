@@ -55,7 +55,8 @@ server.post('/generate-visit-plan', async (req, res) => {
       },
       select: {
         id: true,
-        firstName: true, 
+        firstName: true,
+        lastName:true, 
         created_UId: true, 
         visit_type: true 
       }
