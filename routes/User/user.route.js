@@ -2,7 +2,7 @@ const express = require('express')
 const userRouter =express.Router()
 const {userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,
     getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,
-    markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount
+    markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress
 } = require('./user.controller')
 
 
@@ -33,6 +33,7 @@ userRouter.post('/Performance',Performance)
 userRouter.post('/userPerformance',userPerformance)
 userRouter.post('/rejectTp',rejectTp)
 userRouter.post('/visitedCount',visitedCount)
+userRouter.post('/addAddress',addAddress)
 
 
 

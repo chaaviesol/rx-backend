@@ -2443,7 +2443,7 @@ const visitedDetailsByMonth = async(req,res)=>{
 
 const createTravelplan = async (req, res) => {
     try {
-      const { user_id, plan } = req.body;
+      const { user_id, plan ,travelPlanId } = req.body;
       console.log("req---", req);
       const createdDate = new Date();
   
@@ -2454,6 +2454,15 @@ const createTravelplan = async (req, res) => {
       const findMonth = new Date(`${month}-${day}-${year}`);
       const Month = findMonth.getMonth() + 1;
       console.log({ Month });
+
+
+
+      //if there is travel plan id 
+    //   if(travelPlanId){
+
+    //   }else{
+
+    //   }
   
       const createPlan = await prisma.travelPlan.create({
         data: {
@@ -2568,7 +2577,7 @@ const responseWithDoctorNames = visitCount.map(({ id, firstName, lastName }) => 
         visitCount: visitCount,
         missedVisits: missedVisits,
         combinedVisitReport: responseWithDoctorNames,
-      });
+      }); 
     } catch (err) {
       console.log({ err });
       res.status(404).json({
@@ -2601,7 +2610,8 @@ const getTravelPlan = async(req,res)=>{
                 select:{
                     id:true,
                     firstName:true,
-                    lastName:true
+                    lastName:true,
+                    visit_type:true
                 }
               
             })

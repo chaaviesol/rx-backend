@@ -1552,6 +1552,34 @@ const visitedCount = async(req,res)=>{
     }
 }
 
+
+
+
+const addAddress = async(req,res)=>{
+    try{
+        const {doc_id,address,userId,chemist,product} = req.body
+
+        const add_drAddress = await prisma.doctor_address.create({
+            data: {
+                doc_id: doc_id,
+                address: address,
+                created_date: date,
+                userId:userId,
+                chemist:chemist,
+                product:product
+            }
+        })
+        console.log({add_drAddress})
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
+
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress
 }
