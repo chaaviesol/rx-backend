@@ -2611,7 +2611,8 @@ const getTravelPlan = async(req,res)=>{
                     id:true,
                     firstName:true,
                     lastName:true,
-                    visit_type:true
+                    visit_type:true,
+                    no_of_visits:true
                 }
               
             })
