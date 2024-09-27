@@ -29,6 +29,7 @@ jobs:
             git stash || echo "No changes to stash"
             git pull origin main
           fi
+          pm2 restart server.js
         EOF
     - name: Cleanup SSH Key
       run: rm private_key.pem
