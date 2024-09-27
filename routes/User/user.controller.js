@@ -601,27 +601,32 @@ const SubmitAutomaticTp = async(req,res)=>{
         let createdPlan = []
        
         for(let i=0 ; i<data.length ;i++){
-         
+         console.log("hhhhhhhhhhh")
             const date = Object.keys(data[i])[0]
-            // console.log({date})
+            console.log({date})
           
 
             const doctorList = data[i][date]
           
-             
+             console.log({doctorList})
             for(let j=0 ; j<doctorList.length ; j++){
+
                const doctors = doctorList[j].doctor
-            //    console.log({doctors})
+               console.log({doctors})
             
+               const [firstName, lastName] = doctors.split(" ");
+               console.log({ firstName, lastName });
+
 
             const findDoctor = await prisma.doctor_details.findMany({
                 where:{
-                    firstName:doctors
+                    firstName:firstName,
+                    lastName:lastName
                 }
             })
             console.log({findDoctor})
-            const drId =findDoctor[0].id
-            // console.log({drId})
+            const drId = findDoctor[0].id
+            console.log({drId})
 
             
             const createDetailedPlan = await prisma.detailedTravelPlan.create({
@@ -647,7 +652,7 @@ const SubmitAutomaticTp = async(req,res)=>{
         res.status(200).json({
         error:true,
         success:false,
-        message:"Successfull",
+        message:"Successfull aaded tp",
         data:createPlan,
         createDetailedPlan:createdPlan,
        
@@ -1655,7 +1660,7 @@ const addAddress = async (req, res) => {
         const { doc_id, address, userId, chemist, product, headquarters, area, schedule } = req.body;
         const date = new Date();
 
-        // 1. Add Doctor Address
+      
         const add_drAddress = await prisma.doctor_address.create({
             data: {
                 doc_id: doc_id,
@@ -1668,10 +1673,10 @@ const addAddress = async (req, res) => {
         });
         console.log({ add_drAddress });
 
-        const newAddressId = add_drAddress.id; // New address ID
+        const newAddressId = add_drAddress.id; 
         console.log({ newAddressId });
 
-        // 2. Fetch Headquarters ID
+      
         const getHeadquarters = await prisma.headquarters.findMany({
             where: {
                 headquarter_name: headquarters,
@@ -1688,7 +1693,7 @@ const addAddress = async (req, res) => {
             });
         }
 
-        const headquarterId = getHeadquarters[0].id; // Get the ID of the first headquarters
+        const headquarterId = getHeadquarters[0].id; 
         console.log({ headquarterId });
 
         // 3. Add Schedule
@@ -1706,19 +1711,20 @@ const addAddress = async (req, res) => {
         const scheduleID = addSchedule.id;
         console.log({ scheduleID });
 
-        // 4. Get Current Address IDs
+        
         const currentDetails = await prisma.doctor_details.findUnique({
             where: {
                 id: doc_id
             },
             select: {
-                address_id: true, // Assuming address_id is stored as an array
+                address_id: true, 
                 headquaters: true,
-                scheduleData: true // If you want to keep the existing schedule IDs as well
+                scheduleData: true 
             }
         });
 
-        // Check if current details exist
+       
+        
         if (!currentDetails) {
             return res.status(404).json({
                 error: true,
@@ -1727,35 +1733,35 @@ const addAddress = async (req, res) => {
             });
         }
 
-        // 5. Combine Old and New Address IDs
+       
         const existingAddressIDs = Array.isArray(currentDetails.address_id) ? currentDetails.address_id : [];
-        const updatedAddressIDs = [...existingAddressIDs, newAddressId]; // Combine existing and new address ID
+        const updatedAddressIDs = [...existingAddressIDs, newAddressId]; 
 
-        // 6. Prepare New Schedule Data
+        
         const existingScheduleData = Array.isArray(currentDetails.scheduleData) ? currentDetails.scheduleData : [];
-        const updatedScheduleData = [...existingScheduleData, scheduleID]; // Combine existing and new schedule ID
+        const updatedScheduleData = [...existingScheduleData, scheduleID]; 
 
-        // 7. Update Doctor Details
+       
         const add_addressID = await prisma.doctor_details.update({
             where: {
                 id: doc_id
             },
             data: {
-                address_id: updatedAddressIDs, // Store combined address IDs
-                headquaters: headquarterId,     // Update headquarter 
-                scheduleData: updatedScheduleData // Use combined schedule data
+                address_id: updatedAddressIDs, 
+                headquaters: headquarterId,     
+                scheduleData: updatedScheduleData 
             }
         });
         console.log({ add_addressID });
 
-        // 8. Send Response
+        
         res.status(200).json({
             error: false,
             success: true,
             message: "Successfully added address and schedule.",
             add_drAddress: add_drAddress,
             addSchedule: addSchedule,
-            updatedDetails: add_addressID // Include updated doctor details in response
+            updatedDetails: add_addressID 
         });
 
     } catch (err) {
