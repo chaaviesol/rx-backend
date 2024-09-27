@@ -51,7 +51,8 @@ server.post('/generate-visit-plan', async (req, res) => {
   try {
     const findDr = await prisma.doctor_details.findMany({
       where: { 
-        created_UId: userId 
+        created_UId: userId ,
+        approvalStatus:"Accepted"
       },
       select: {
         id: true,
@@ -59,6 +60,7 @@ server.post('/generate-visit-plan', async (req, res) => {
         lastName:true, 
         created_UId: true, 
         visit_type: true 
+        
       }
     });
 
@@ -81,7 +83,8 @@ server.post('/generate-visit-plan', async (req, res) => {
           doc_id: true, 
           userId: true, 
           address: true, 
-          area: true 
+          area: true,
+          
         }
       });
       const findSchedule = await prisma.schedule.findMany({

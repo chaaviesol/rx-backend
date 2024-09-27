@@ -572,6 +572,7 @@ const SubmitAutomaticTp = async(req,res)=>{
     try{
         const { user_id, data } = req.body;
         console.log("req---", req.body);
+        console.log(req['01-11-2024']);
         
         const createdDate = new Date();
         
@@ -1555,65 +1556,386 @@ const visitedCount = async(req,res)=>{
 
 
 
-const addAddress = async(req,res)=>{
-    try{
-        const {doc_id,address,userId,chemist,product,headquarters,area} = req.body
-        const date = new Date()
+// const addAddress = async(req,res)=>{
+//     try{
+//         const {doc_id,address,userId,chemist,product,headquarters,area,schedule} = req.body
+//         const date = new Date()
+//         const add_drAddress = await prisma.doctor_address.create({
+//             data: {
+//                 doc_id: doc_id,
+//                 address: address,
+//                 created_date: date,
+//                 userId:userId,
+//                 chemist:chemist,
+//                 product:product
+//             }
+//         })
+//         console.log({add_drAddress})
+//         const getId = add_drAddress.id
+//         console.log({getId})
+//         const getHeadquaters= await prisma.headquarters.findMany({
+//             where:{
+//               headquarter_name:headquarters,
+//               sub_headquarter:area
+//             }
+
+//         })
+//         console.log({getHeadquaters})
+//         const headquarterId = getHeadquaters.id
+//         console.log({headquarterId})
+//         const addSchedule = await prisma.schedule.create({
+//             data:{
+//                dr_id:doc_id,
+//                user_id:userId,
+//                schedule:schedule,
+//                createdDate:date,
+//                addressId:getId
+//             }
+//        })
+//        console.log({addSchedule})
+
+//        const scheduleID = addSchedule.id
+//        console.log({scheduleID})
+
+//        //getting the complete address
+//        const getAddressData = await prisma.doctor_address.findMany({
+//         where:{
+//             id: doc_id
+//         },
+//         select:{
+//             id:true
+//         }
+//        })
+//        console.log({getAddressData})
+       
+//        //get complete schedule of the doctor
+//        const getSchedule = await prisma.schedule.findMany({
+//         where:{
+//             dr_id:doc_id
+//         },
+//         select:{
+//             id:true
+//         }
+//        })
+//        console.log({getSchedule})
+
+//        const add_addressID = await prisma.doctor_details.update({
+//         where: {
+//             id: doc_id
+//         },
+//         data: {
+//             address_id: getId,
+//             headquaters:headquarterId,
+//             scheduleData:scheduleID 
+//         }
+//     })
+//     console.log({ add_addressID })
+//     res.status(200).json({
+//         error:false,
+//         success:true,
+//         message:"Successfull",
+//         add_drAddress:add_drAddress,
+//         addSchedule:addSchedule
+//     })
+
+//     }catch(err){
+//         console.log({err})
+//         res.status(404).json({
+//             error:true,
+//             success:false,
+//             message:"Internal server error"
+//         })
+//     }
+// }
+
+
+
+const addAddress = async (req, res) => {
+    try {
+        const { doc_id, address, userId, chemist, product, headquarters, area, schedule } = req.body;
+        const date = new Date();
+
+        // 1. Add Doctor Address
         const add_drAddress = await prisma.doctor_address.create({
             data: {
                 doc_id: doc_id,
                 address: address,
                 created_date: date,
-                userId:userId,
-                chemist:chemist,
-                product:product
+                userId: userId,
+                chemist: chemist,
+                product: product
             }
-        })
-        console.log({add_drAddress})
-        const getId = add_drAddress.id
-        console.log({getId})
-        const getHeadquaters= await prisma.headquarters.findMany({
-            where:{
-              headquarter_name:headquarters,
-              sub_headquarter:area
-            }
+        });
+        console.log({ add_drAddress });
 
-        })
-        console.log({getHeadquaters})
-        const headquarterId = getHeadquaters.id
-        console.log({headquarterId})
-        const addSchedule = await prisma.schedule.create({
-            data:{
-               dr_id:doc_id,
-               user_id:userId,
-               schedule:schedule,
-               createdDate:date,
-               addressId:getId
+        const newAddressId = add_drAddress.id; // New address ID
+        console.log({ newAddressId });
+
+        // 2. Fetch Headquarters ID
+        const getHeadquarters = await prisma.headquarters.findMany({
+            where: {
+                headquarter_name: headquarters,
+                sub_headquarter: area
             }
-       })
-       console.log(addSchedule)
-       const add_addressID = await prisma.doctor_details.update({
-        where: {
-            id: doc_id
-        },
-        data: {
-            address_id: getId,
-            headquaters:headquarterId,
-            scheduleData:scheduleId 
+        });
+        console.log({ getHeadquarters });
+
+        if (!getHeadquarters || getHeadquarters.length === 0) {
+            return res.status(404).json({
+                error: true,
+                success: false,
+                message: "Headquarters not found"
+            });
         }
-    })
-    console.log({ add_addressID })
+
+        const headquarterId = getHeadquarters[0].id; // Get the ID of the first headquarters
+        console.log({ headquarterId });
+
+        // 3. Add Schedule
+        const addSchedule = await prisma.schedule.create({
+            data: {
+                dr_id: doc_id,
+                user_id: userId,
+                schedule: schedule,
+                createdDate: date,
+                addressId: newAddressId
+            }
+        });
+        console.log({ addSchedule });
+
+        const scheduleID = addSchedule.id;
+        console.log({ scheduleID });
+
+        // 4. Get Current Address IDs
+        const currentDetails = await prisma.doctor_details.findUnique({
+            where: {
+                id: doc_id
+            },
+            select: {
+                address_id: true, // Assuming address_id is stored as an array
+                headquaters: true,
+                scheduleData: true // If you want to keep the existing schedule IDs as well
+            }
+        });
+
+        // Check if current details exist
+        if (!currentDetails) {
+            return res.status(404).json({
+                error: true,
+                success: false,
+                message: "Doctor details not found"
+            });
+        }
+
+        // 5. Combine Old and New Address IDs
+        const existingAddressIDs = Array.isArray(currentDetails.address_id) ? currentDetails.address_id : [];
+        const updatedAddressIDs = [...existingAddressIDs, newAddressId]; // Combine existing and new address ID
+
+        // 6. Prepare New Schedule Data
+        const existingScheduleData = Array.isArray(currentDetails.scheduleData) ? currentDetails.scheduleData : [];
+        const updatedScheduleData = [...existingScheduleData, scheduleID]; // Combine existing and new schedule ID
+
+        // 7. Update Doctor Details
+        const add_addressID = await prisma.doctor_details.update({
+            where: {
+                id: doc_id
+            },
+            data: {
+                address_id: updatedAddressIDs, // Store combined address IDs
+                headquaters: headquarterId,     // Update headquarter 
+                scheduleData: updatedScheduleData // Use combined schedule data
+            }
+        });
+        console.log({ add_addressID });
+
+        // 8. Send Response
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "Successfully added address and schedule.",
+            add_drAddress: add_drAddress,
+            addSchedule: addSchedule,
+            updatedDetails: add_addressID // Include updated doctor details in response
+        });
+
+    } catch (err) {
+        console.log({ err });
+        res.status(500).json({
+            error: true,
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
+
+
+
+
+
+
+
+// const addAddress = async (req, res) => {
+//     try {
+//         const { doc_id, address, userId, chemist, product, headquarters, area, schedule } = req.body;
+//         const date = new Date();
+
+//         // 1. Add Doctor Address
+//         const add_drAddress = await prisma.doctor_address.create({
+//             data: {
+//                 doc_id: doc_id,
+//                 address: address,
+//                 created_date: date,
+//                 userId: userId,
+//                 chemist: chemist,
+//                 product: product
+//             }
+//         });
+//         console.log({ add_drAddress });
+
+//         const getId = add_drAddress.id;
+//         console.log({ getId });
+
+//         // 2. Fetch Headquarters ID
+//         const getHeadquarters = await prisma.headquarters.findMany({
+//             where: {
+//                 headquarter_name: headquarters,
+//                 sub_headquarter: area
+//             }
+//         });
+//         console.log({ getHeadquarters });
+
+//         if (!getHeadquarters || getHeadquarters.length === 0) {
+//             return res.status(404).json({
+//                 error: true,
+//                 success: false,
+//                 message: "Headquarters not found"
+//             });
+//         }
+
+//         const headquarterId = getHeadquarters[0].id; // Get the ID of the first headquarters
+//         console.log({ headquarterId });
+
+//         // 3. Add Schedule
+//         const addSchedule = await prisma.schedule.create({
+//             data: {
+//                 dr_id: doc_id,
+//                 user_id: userId,
+//                 schedule: schedule,
+//                 createdDate: date,
+//                 addressId: getId
+//             }
+//         });
+//         console.log({ addSchedule });
+
+//         const scheduleID = addSchedule.id;
+//         console.log({ scheduleID });
+
+//         // 4. Get Current Doctor Details
+//         const currentDetails = await prisma.doctor_details.findUnique({
+//             where: {
+//                 id: doc_id
+//             }
+//         });
+
+//         // Check if doctor details exist
+//         if (!currentDetails) {
+//             return res.status(404).json({
+//                 error: true,
+//                 success: false,
+//                 message: "Doctor details not found"
+//             });
+//         }
+
+//         // 5. Update Doctor Details
+//         const updatedDetails = await prisma.doctor_details.update({
+//             where: {
+//                 id: doc_id
+//             },
+//             data: {
+//                 address_id: getId,        // Update address_id
+//                 scheduleData: scheduleID   // Update scheduleData
+//                 // headquaters: headquarterId // Optional: Uncomment if you want to update headquaters
+//             }
+//         });
+//         console.log({ updatedDetails });
+
+//         // 6. Send Response
+//         res.status(200).json({
+//             error: false,
+//             success: true,
+//             message: "Successfully added address and schedule.",
+//             add_drAddress: add_drAddress,
+//             addSchedule: addSchedule,
+//             updatedDetails: updatedDetails // Optional: Include updated details in response
+//         });
+
+//     } catch (err) {
+//         console.log({ err });
+//         res.status(500).json({
+//             error: true,
+//             success: false,
+//             message: "Internal server error"
+//         });
+//     }
+// };
+
+
+
+
+
+
+//find tpId and month using userId
+const findTpAddedMonth = async(req,res)=>{
+    try{
+        const {userID} = req.body
+        const findMonth = await prisma.travelPlan.findMany({
+            where:{
+                user_id:userID
+            },
+            select:{
+                id:true,
+                month:true
+            }
+        })
+        console.log({findMonth})
+        
+        let uniqueMonth = new Set();
+        for(let i=0; i<findMonth.length ;i++){
+            const getMonth = findMonth[i].month
+            console.log({getMonth})
+            if(getMonth !== null){
+            uniqueMonth.add(getMonth)
+            }
+        }
+        let uniqueMonthArray = Array.from(uniqueMonth);
+        console.log({uniqueMonthArray})
+        console.log({uniqueMonth})
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        let monthNameArray = uniqueMonthArray.map(month => monthNames[month - 1]);
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:monthNameArray
+        })
 
     }catch(err){
         console.log({err})
         res.status(404).json({
-            error:true,
-            success:false,
+            error:false,
+            success:true,
             message:"Internal server error"
         })
     }
-}
+} 
+
+
+
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress,findTpAddedMonth
 }

@@ -2617,9 +2617,26 @@ const getTravelPlan = async(req,res)=>{
               
             })
             console.log({findDr})
+            const getAddress = await prisma.doctor_address.findMany({
+                where:{
+                    doc_id:getDetails[i].dr_id
+                },
+                select:{
+                    id:true,
+                    address:true
+                }
+            })
+            console.log({getAddress})
+            for (let j = 0; j < findDr.length; j++) {
+                findDr[j] = {
+                  ...findDr[j],
+                  addresses: getAddress
+                };
+              }
             getDetails[i] = {
                 ...getDetails[i],
-                drDetails: findDr
+                drDetails: findDr,
+                // address:getAddress
             };
         }
         res.status(200).json({
