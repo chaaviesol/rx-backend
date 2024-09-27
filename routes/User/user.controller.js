@@ -1939,9 +1939,59 @@ const findTpAddedMonth = async(req,res)=>{
     }
 } 
 
+//get travel of rep underManager
 
+const getUserAddedTp = async(req,res)=>{
+    try{
+        const {reportingOfficer_id} = req.body
+
+        const getUser = await prisma.userData.findMany({
+            where:{
+                reportingOfficer_id:reportingOfficer_id,
+                status:"Active"
+
+            }
+        })
+        console.log({getUser})
+        const userTp =[]
+        for(let i=0;i<getUser.length;i++){
+            const userId = getUser[i].id
+            console.log({userId})
+            const findTp = await prisma.travelPlan.findMany({
+                where:{
+                    user_id:userId,
+                    status:"Submitted"
+                }
+            })
+            console.log({findTp})
+          
+      findTp.forEach((tp) => {
+        userTp.push({
+          tp: {
+            ...tp,
+            user: getUser[i], // Adding user data inside tp
+          },
+        });
+      });
+        }
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:userTp
+        })
+
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:false,
+            message:"Internal server error"
+        })
+    }
+}
 
 
 module.exports ={userRegistration,listArea,listDoctors,getAddedDoctor,todaysTravelPlan,addSchedule,editSchedule,approveDoctors,getDoctorList_forApproval,SubmitAutomaticTp,findUserHeadquaters,EditTravelPlan,
-    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress,findTpAddedMonth
+    userAddedTP,doctorsInTp,addedChemist,resetPassword,checkPassword,markVisitedData,approveTp,deleteTp,Performance,userPerformance,rejectTp,visitedCount,addAddress,findTpAddedMonth,getUserAddedTp
 }
