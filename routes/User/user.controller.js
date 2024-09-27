@@ -626,7 +626,7 @@ const SubmitAutomaticTp = async(req,res)=>{
             })
             console.log({findDoctor})
             const drId = findDoctor[0].id
-            console.log({drId})
+            // console.log({drId})
 
             
             const createDetailedPlan = await prisma.detailedTravelPlan.create({
