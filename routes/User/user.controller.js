@@ -568,110 +568,222 @@ const getDoctorList_forApproval = async(req,res)=>{
 
 
 //api for saving the tp
-const SubmitAutomaticTp = async(req,res)=>{
-    try{
-        const { user_id, data } = req.body;
-        console.log("req---", req.body);
-       
-req.data.forEach((dateObj) => {
-    Object.entries(dateObj).forEach(([date, array]) => {
-      console.log(`Data for ${date}:`, array);
-    });
-  });
+// const SubmitAutomaticTp = async(req,res)=>{
+//     try{
+//         const { user_id, data } = req.body;
+//         console.log("req---", req.body);
+//        console.log("req----",req.body.data)
+      
         
-        const createdDate = new Date();
         
-        // Extract the date from the first key of the first object in the data array
-        const getDate = Object.keys(data[0])[0];
-        console.log({ getDate });
+//         const createdDate = new Date();
         
-        const [day, month, year] = getDate.split('-');
-        const findMonth = new Date(`${month}-${day}-${year}`);
-        const Month = findMonth.getMonth() + 1;
-        console.log({ Month });
+//         // Extract the date from the first key of the first object in the data array
+//         const getDate = Object.keys(data[0])[0];
+//         console.log({ getDate });
+        
+//         const [day, month, year] = getDate.split('-');
+//         const findMonth = new Date(`${month}-${day}-${year}`);
+//         const Month = findMonth.getMonth() + 1;
+//         console.log({ Month });
 
 
-        const createPlan = await prisma.travelPlan.create({
-                    data:{
-                      user_id:user_id,
-                      created_date:createdDate,
-                      month:Month,
-                      status:"Submitted"
-                    }
-        })
-        console.log({createPlan})
+//         const createPlan = await prisma.travelPlan.create({
+//                     data:{
+//                       user_id:user_id,
+//                       created_date:createdDate,
+//                       month:Month,
+//                       status:"Submitted"
+//                     }
+//         })
+//         console.log({createPlan})
     
-        const travelPlanid = createPlan.id
-        console.log({travelPlanid})
-        let createdPlan = []
-       
-        for(let i=0 ; i<data.length ;i++){
-         console.log("hhhhhhhhhhh")
-            const date = Object.keys(data[i])[0]
-            console.log({date})
-          
-
-            const doctorList = data[i][date]
-          
-             console.log({doctorList})
-            for(let j=0 ; j<doctorList.length ; j++){
-
-               const doctors = doctorList[j].doctor
-               console.log({doctors})
-            
-               const [firstName, lastName] = doctors.split(" ");
-               console.log({ firstName, lastName });
-
-
-            const findDoctor = await prisma.doctor_details.findMany({
-                where:{
-                    firstName:firstName,
-                    lastName:lastName
-                }
-            })
-            console.log({findDoctor})
-            const drId = findDoctor[0].id
-            // console.log({drId})
-
-            
-            const createDetailedPlan = await prisma.detailedTravelPlan.create({
-                data:{
-                    travelplan_id:travelPlanid,
-                    dr_id:drId,
-                    user_id:user_id,
-                    date:date,
-                    status:"Submitted",
-                    created_date:createdDate
-                }
-            })
-            console.log({createDetailedPlan})
-            createdPlan.push(createDetailedPlan)
-        }
+//         const travelPlanid = createPlan.id
+//         console.log({travelPlanid})
+//         let createdPlan = []
         
-}
+//         for(let i=0 ; i<data.length ;i++){
+//          console.log("hhhhhhhhhhh")
+//             const date = Object.keys(data[i])[0]
+//             console.log({date})
+          
+
+//             const doctorList = data[i][date]
+          
+//              console.log({doctorList})
+//             for(let j=0 ; j<doctorList.length ; j++){
+
+//                const doctors = doctorList[j].doctor
+//                console.log({doctors})
+            
+//                const [firstName, lastName] = doctors.split(" ");
+//                console.log({ firstName, lastName });
+//                 console.log({firstName})
+//                 console.log({lastName})
+//             const findDoctor = await prisma.doctor_details.findMany({
+//                 where:{
+//                     firstName:firstName,
+//                     lastName:lastName
+//                 }
+//             })
+//             console.log({findDoctor})
+//             const drId = findDoctor[0].id
+//             // console.log({drId})
+
+            
+//             const createDetailedPlan = await prisma.detailedTravelPlan.create({
+//                 data:{
+//                     travelplan_id:travelPlanid,
+//                     dr_id:drId,
+//                     user_id:user_id,
+//                     date:date,
+//                     status:"Submitted",
+//                     created_date:createdDate
+//                 }
+//             })
+//             console.log({createDetailedPlan})
+//             createdPlan.push(createDetailedPlan)
+//         }
+        
+// }
    
 
 
 
         
-        res.status(200).json({
-        error:true,
-        success:false,
-        message:"Successfull aaded tp",
-        data:createPlan,
-        createDetailedPlan:createdPlan,
+//         res.status(200).json({
+//         error:true,
+//         success:false,
+//         message:"Successfull aaded tp",
+//         data:createPlan,
+//         createDetailedPlan:createdPlan,
        
-     })
+//      })
 
-    }catch(err){
-        console.log({err})
-        res.status(404).json({
-            error:true,
-            success:false,
-            message:"internal server error"
-        })
+//     }catch(err){
+//         console.log({err})
+//         res.status(404).json({
+//             error:true,
+//             success:false,
+//             message:"internal server error"
+//         })
+//     }
+// }
+
+const SubmitAutomaticTp = async (req, res) => {
+    try {
+        const { user_id, data } = req.body;
+        console.log("Request body:", req.body);
+
+        const createdDate = new Date();
+
+        // Create the travel plan
+        const createPlan = await prisma.travelPlan.create({
+            data: {
+                user_id: user_id,
+                created_date: createdDate,
+                month: createdDate.getMonth() + 1,
+                status: "Submitted"
+            }
+        });
+        console.log("Travel plan created:", createPlan);
+
+        const travelPlanid = createPlan.id;
+        let createdPlan = [];
+
+        // Iterate over each item in the data array
+        for (let i = 0; i < data.length; i++) {
+            const dates = Object.keys(data[i]); // Get all dates in the current object
+            console.log("Processing dates:", dates);
+
+            // Iterate over all dates
+            for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
+                const date = dates[dateIndex];
+                console.log("Processing date:", date);
+
+                const doctorList = data[i][date];
+                console.log("Doctors list for the date:", doctorList);
+
+                // Process each doctor for the current date
+                for (let j = 0; j < doctorList.length; j++) {
+                    const doctorInfo = doctorList[j];
+                    const doctorName = doctorInfo.doctor;
+                    console.log("Processing doctor:", doctorName);
+
+                    // Split doctor name robustly
+                    let nameParts = doctorName.split(" ");
+                    let firstName, lastName;
+
+                    if (nameParts.length === 3 && nameParts[0] === "Dr.") {
+                        firstName = nameParts[1];  // "Musthafa"
+                        lastName = nameParts[2];   // "Doc1"
+                    } else if (nameParts.length === 2) {
+                        firstName = nameParts[0];  // "Abhi"
+                        lastName = nameParts[1];   // "doc3"
+                    } else {
+                        console.error(`Unable to parse doctor name: ${doctorName}`);
+                        continue;  // Skip if name cannot be parsed
+                    }
+
+                    console.log(`Extracted first name: ${firstName}, last name: ${lastName}`);
+
+                    // Find the doctor in the database
+                    const findDoctor = await prisma.doctor_details.findMany({
+                        where: {
+                            firstName: firstName,
+                            lastName: lastName
+                        }
+                    });
+
+                    if (findDoctor.length === 0) {
+                        console.error(`Doctor not found in database: ${firstName} ${lastName}`);
+                        continue; // Skip if doctor not found
+                    }
+
+                    const drId = findDoctor[0].id;
+                    console.log("Found doctor ID:", drId);
+
+                    // Create the detailed travel plan for this doctor
+                    const createDetailedPlan = await prisma.detailedTravelPlan.create({
+                        data: {
+                            travelplan_id: travelPlanid,
+                            dr_id: drId,
+                            user_id: user_id,
+                            date: date,
+                            status: "Submitted",
+                            created_date: createdDate
+                        }
+                    });
+
+                    console.log("Detailed travel plan created:", createDetailedPlan);
+                    createdPlan.push(createDetailedPlan);
+                }
+            }
+        }
+
+        // Send the response after processing all doctors
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "Successfully added travel plan",
+            data: createPlan,
+            createDetailedPlan: createdPlan
+        });
+    } catch (err) {
+        console.log("Error:", err);
+        res.status(500).json({
+            error: true,
+            success: false,
+            message: "Internal server error",
+            details: err.message
+        });
     }
-}
+};
+
+
+
+
+
 
 
 //api for getting the headquaters of rep

@@ -501,7 +501,7 @@ const leaveHistory = async (req, res) => {
             return res.status(404).json({
                 error: true,
                 success: false,
-                message: "Provided invalid ID"
+                message: "No data found"
             })
         }
 
