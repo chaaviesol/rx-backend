@@ -572,7 +572,12 @@ const SubmitAutomaticTp = async(req,res)=>{
     try{
         const { user_id, data } = req.body;
         console.log("req---", req.body);
-        console.log(req['01-11-2024']);
+       
+req.data.forEach((dateObj) => {
+    Object.entries(dateObj).forEach(([date, array]) => {
+      console.log(`Data for ${date}:`, array);
+    });
+  });
         
         const createdDate = new Date();
         
@@ -591,7 +596,7 @@ const SubmitAutomaticTp = async(req,res)=>{
                       user_id:user_id,
                       created_date:createdDate,
                       month:Month,
-                      status:"Draft"
+                      status:"Submitted"
                     }
         })
         console.log({createPlan})
@@ -635,11 +640,11 @@ const SubmitAutomaticTp = async(req,res)=>{
                     dr_id:drId,
                     user_id:user_id,
                     date:date,
-                    status:"Draft",
+                    status:"Submitted",
                     created_date:createdDate
                 }
             })
-            // console.log({createDetailedPlan})
+            console.log({createDetailedPlan})
             createdPlan.push(createDetailedPlan)
         }
         
@@ -1961,6 +1966,9 @@ const getUserAddedTp = async(req,res)=>{
                 where:{
                     user_id:userId,
                     status:"Submitted"
+                },
+                orderBy:{
+                    created_date:"desc"
                 }
             })
             console.log({findTp})
