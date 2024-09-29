@@ -2441,152 +2441,323 @@ const visitedDetailsByMonth = async(req,res)=>{
 
 //create travelPlan(in use)
 
+// const createTravelplan = async (req, res) => {
+//     try {
+//       const { user_id, plan ,travelPlanId } = req.body;
+//       console.log("req---", req);
+//       const createdDate = new Date();
+  
+//       const getDate = plan[0].date;
+//       console.log({ getDate });
+  
+//       const [day, month, year] = getDate.split("-");
+//       const findMonth = new Date(`${month}-${day}-${year}`);
+//       const Month = findMonth.getMonth() + 1;
+//       console.log({ Month });
+
+
+
+//       //if there is travel plan id 
+//     //   if(travelPlanId){
+
+//     //   }else{
+
+//     //   }
+  
+//       const createPlan = await prisma.travelPlan.create({
+//         data: {
+//           user_id: user_id,
+//           created_date: createdDate,
+//           month: Month,
+//           status: "Draft",
+//         },
+//       });
+//       console.log({ createPlan });
+  
+//       const travelPlanid = createPlan.id;
+//       console.log({ travelPlanid });
+//       let createdPlan = [];
+//       let doctorId = [];
+  
+//       for (let i = 0; i < plan.length; i++) {
+//         const date = plan[i].date;
+//         console.log({ date });
+//         const doctors = plan[i].doctors;
+//         console.log({ doctors });
+  
+//         for (let j = 0; j < doctors.length; j++) {
+//           const dr_id = doctors[j];
+//           doctorId.push(dr_id);
+  
+//           const createDetailedPlan = await prisma.detailedTravelPlan.create({
+//             data: {
+//               travelplan_id: travelPlanid,
+//               dr_id: dr_id,
+//               user_id: user_id,
+//               date: date,
+//               status: "Draft",
+//               created_date: createdDate,
+//             },
+//           });
+  
+//           console.log({ createDetailedPlan });
+//           createdPlan.push(createDetailedPlan);
+//         }
+//       }
+  
+//       // Counting the number of doctors
+//       const countDrId = {};
+  
+//       doctorId.forEach((id) => {
+//         if (countDrId[id]) {
+//           countDrId[id]++;
+//         } else {
+//           countDrId[id] = 1;
+//         }
+//       });
+//       console.log({ countDrId });
+  
+//       const visitCount = [];
+//       const uniqueId = new Set();
+//       for (let i = 0; i < doctorId.length; i++) {
+//         const drId = doctorId[i];
+//         if (!uniqueId.has(drId)) {
+//           const findVisitCount = await prisma.doctor_details.findMany({
+//             where: {
+//               id: drId,
+//             },
+//             select: {
+//               id: true,
+//               firstName: true,
+//               lastName: true,
+//               no_of_visits: true,
+//             },
+//           });
+//           console.log({ findVisitCount });
+//           visitCount.push(...findVisitCount); // Spread the results
+//           uniqueId.add(drId);
+//         }
+//       }
+//       console.log({ visitCount });
+  
+//       // Convert visitCount to a dictionary for easy lookup
+//       const visitCountDict = visitCount.reduce((acc, doctor) => {
+//         acc[doctor.id] = doctor.no_of_visits;
+//         return acc;
+//       }, {});
+  
+//     // Calculate missed visits
+// const missedVisits = {};
+// for (const [drId, plannedVisits] of Object.entries(countDrId)) {
+//     const recordedVisits = visitCountDict[drId] || 0;
+//     const missed = recordedVisits - plannedVisits; // Subtract planned from recorded
+//     if (missed > 0) {
+//         missedVisits[drId] = missed;
+//     }
+// }
+
+// // Replace doctor IDs with names in the response
+// const responseWithDoctorNames = visitCount.map(({ id, firstName, lastName }) => {
+//     return {
+//         doctorName: `${firstName} ${lastName}`,
+//         plannedVisits: countDrId[id] || 0,
+//         recordedVisits: visitCountDict[id] || 0,
+//         missedVisits: Math.max((visitCountDict[id] || 0) - (countDrId[id] || 0), 0) // Corrected calculation
+//     };
+// });
+
+//       res.status(200).json({
+//         error: false,
+//         success: true,
+//         message: "Successful",
+//         data: createPlan,
+//         createdPlan: createdPlan,
+//         dr_id: doctorId,
+//         countDrId: countDrId,
+//         visitCount: visitCount,
+//         missedVisits: missedVisits,
+//         combinedVisitReport: responseWithDoctorNames,
+//       }); 
+//     } catch (err) {
+//       console.log({ err });
+//       res.status(404).json({
+//         error: true,
+//         success: false,
+//         message: "Internal server error",
+//       });
+//     }
+//   };
+
 const createTravelplan = async (req, res) => {
     try {
-      const { user_id, plan ,travelPlanId } = req.body;
-      console.log("req---", req);
-      const createdDate = new Date();
-  
-      const getDate = plan[0].date;
-      console.log({ getDate });
-  
-      const [day, month, year] = getDate.split("-");
-      const findMonth = new Date(`${month}-${day}-${year}`);
-      const Month = findMonth.getMonth() + 1;
-      console.log({ Month });
+        const { user_id, plan, travelPlanId } = req.body;
+        console.log("Request Body:", req.body);
+        const createdDate = new Date();
 
-
-
-      //if there is travel plan id 
-    //   if(travelPlanId){
-
-    //   }else{
-
-    //   }
-  
-      const createPlan = await prisma.travelPlan.create({
-        data: {
-          user_id: user_id,
-          created_date: createdDate,
-          month: Month,
-          status: "Draft",
-        },
-      });
-      console.log({ createPlan });
-  
-      const travelPlanid = createPlan.id;
-      console.log({ travelPlanid });
-      let createdPlan = [];
-      let doctorId = [];
-  
-      for (let i = 0; i < plan.length; i++) {
-        const date = plan[i].date;
-        console.log({ date });
-        const doctors = plan[i].doctors;
-        console.log({ doctors });
-  
-        for (let j = 0; j < doctors.length; j++) {
-          const dr_id = doctors[j];
-          doctorId.push(dr_id);
-  
-          const createDetailedPlan = await prisma.detailedTravelPlan.create({
-            data: {
-              travelplan_id: travelPlanid,
-              dr_id: dr_id,
-              user_id: user_id,
-              date: date,
-              status: "Draft",
-              created_date: createdDate,
-            },
-          });
-  
-          console.log({ createDetailedPlan });
-          createdPlan.push(createDetailedPlan);
-        }
-      }
-  
-      // Counting the number of doctors
-      const countDrId = {};
-  
-      doctorId.forEach((id) => {
-        if (countDrId[id]) {
-          countDrId[id]++;
+        // If travelPlanId is provided, update the existing travel plan
+        let travelPlanid;
+        let createPlan;
+        if (travelPlanId) {
+            console.log("Updating existing travel plan with ID:", travelPlanId);
+            travelPlanid = travelPlanId;
         } else {
-          countDrId[id] = 1;
-        }
-      });
-      console.log({ countDrId });
-  
-      const visitCount = [];
-      const uniqueId = new Set();
-      for (let i = 0; i < doctorId.length; i++) {
-        const drId = doctorId[i];
-        if (!uniqueId.has(drId)) {
-          const findVisitCount = await prisma.doctor_details.findMany({
-            where: {
-              id: drId,
-            },
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              no_of_visits: true,
-            },
-          });
-          console.log({ findVisitCount });
-          visitCount.push(...findVisitCount); // Spread the results
-          uniqueId.add(drId);
-        }
-      }
-      console.log({ visitCount });
-  
-      // Convert visitCount to a dictionary for easy lookup
-      const visitCountDict = visitCount.reduce((acc, doctor) => {
-        acc[doctor.id] = doctor.no_of_visits;
-        return acc;
-      }, {});
-  
-    // Calculate missed visits
-const missedVisits = {};
-for (const [drId, plannedVisits] of Object.entries(countDrId)) {
-    const recordedVisits = visitCountDict[drId] || 0;
-    const missed = recordedVisits - plannedVisits; // Subtract planned from recorded
-    if (missed > 0) {
-        missedVisits[drId] = missed;
-    }
-}
+            const getDate = plan[0].date;
+            const [day, month, year] = getDate.split("-");
+            const findMonth = new Date(`${month}-${day}-${year}`);
+            const Month = findMonth.getMonth() + 1;
+            console.log("Creating new travel plan for month:", Month);
 
-// Replace doctor IDs with names in the response
-const responseWithDoctorNames = visitCount.map(({ id, firstName, lastName }) => {
-    return {
-        doctorName: `${firstName} ${lastName}`,
-        plannedVisits: countDrId[id] || 0,
-        recordedVisits: visitCountDict[id] || 0,
-        missedVisits: Math.max((visitCountDict[id] || 0) - (countDrId[id] || 0), 0) // Corrected calculation
-    };
-});
+            createPlan = await prisma.travelPlan.create({
+                data: {
+                    user_id: user_id,
+                    created_date: createdDate,
+                    month: Month,
+                    status: "Draft",
+                },
+            });
+            console.log("Created new travel plan:", createPlan);
+            travelPlanid = createPlan.id;
+        }
 
-      res.status(200).json({
-        error: false,
-        success: true,
-        message: "Successful",
-        data: createPlan,
-        createdPlan: createdPlan,
-        dr_id: doctorId,
-        countDrId: countDrId,
-        visitCount: visitCount,
-        missedVisits: missedVisits,
-        combinedVisitReport: responseWithDoctorNames,
-      }); 
+        let createdPlan = [];
+        let doctorId = [];
+
+        for (let i = 0; i < plan.length; i++) {
+            const date = plan[i].date;
+            const doctors = plan[i].doctors;
+            console.log("Processing date:", date);
+            console.log("Processing doctors:", doctors);
+
+            for (let j = 0; j < doctors.length; j++) {
+                const dr_id = doctors[j];
+                doctorId.push(dr_id);
+
+                // Check if the detailed plan for this doctor and travelPlanId already exists
+                const existingPlan = await prisma.detailedTravelPlan.findFirst({
+                    where: {
+                        travelplan_id: travelPlanid,
+                        dr_id: dr_id,
+                        date: date,
+                    },
+                });
+
+                let createOrUpdateDetailedPlan;
+                if (existingPlan) {
+                    // If the detailed travel plan already exists, update it
+                    createOrUpdateDetailedPlan = await prisma.detailedTravelPlan.update({
+                        where: {
+                            id: existingPlan.id,
+                        },
+                        data: {
+                            status: "Draft",
+                            // updated_date: createdDate,
+                        },
+                    });
+                    console.log("Updated detailed travel plan:", createOrUpdateDetailedPlan);
+                } else {
+                    // Create new detailed travel plan if it doesn't exist
+                    createOrUpdateDetailedPlan = await prisma.detailedTravelPlan.create({
+                        data: {
+                            travelplan_id: travelPlanid,
+                            dr_id: dr_id,
+                            user_id: user_id,
+                            date: date,
+                            status: "Draft",
+                            created_date: createdDate,
+                        },
+                    });
+                    console.log("Created new detailed travel plan:", createOrUpdateDetailedPlan);
+                }
+
+                createdPlan.push(createOrUpdateDetailedPlan);
+            }
+        }
+
+        // Counting the number of doctors
+        const countDrId = {};
+        doctorId.forEach((id) => {
+            if (countDrId[id]) {
+                countDrId[id]++;
+            } else {
+                countDrId[id] = 1;
+            }
+        });
+        console.log({ countDrId });
+
+        const visitCount = [];
+        const uniqueId = new Set();
+        for (let i = 0; i < doctorId.length; i++) {
+            const drId = doctorId[i];
+            if (!uniqueId.has(drId)) {
+                const findVisitCount = await prisma.doctor_details.findMany({
+                    where: { id: drId },
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        no_of_visits: true,
+                    },
+                });
+                console.log({ findVisitCount });
+                visitCount.push(...findVisitCount); // Spread the results
+                uniqueId.add(drId);
+            }
+        }
+        console.log({ visitCount });
+
+        // Convert visitCount to a dictionary for easy lookup
+        const visitCountDict = visitCount.reduce((acc, doctor) => {
+            acc[doctor.id] = doctor.no_of_visits;
+            return acc;
+        }, {});
+
+        // Calculate missed visits
+        const missedVisits = {};
+        for (const [drId, plannedVisits] of Object.entries(countDrId)) {
+            const recordedVisits = visitCountDict[drId] || 0;
+            const missed = recordedVisits - plannedVisits;
+            if (missed > 0) {
+                missedVisits[drId] = missed;
+            }
+        }
+
+        // Replace doctor IDs with names in the response
+        const responseWithDoctorNames = visitCount.map(({ id, firstName, lastName }) => {
+            return {
+                doctorName: `${firstName} ${lastName}`,
+                plannedVisits: countDrId[id] || 0,
+                recordedVisits: visitCountDict[id] || 0,
+                missedVisits: Math.max((visitCountDict[id] || 0) - (countDrId[id] || 0), 0),
+            };
+        });
+
+        res.status(200).json({
+            error: false,
+            success: true,
+            message: "Successfully added/updated travel plan",
+            data: createPlan || { id: travelPlanid }, // Send either the newly created plan or the updated plan ID
+            createdPlan: createdPlan,
+            dr_id: doctorId,
+            countDrId: countDrId,
+            visitCount: visitCount,
+            missedVisits: missedVisits,
+            combinedVisitReport: responseWithDoctorNames,
+        });
     } catch (err) {
-      console.log({ err });
-      res.status(404).json({
-        error: true,
-        success: false,
-        message: "Internal server error",
-      });
+        console.log({ err });
+        res.status(500).json({
+            error: true,
+            success: false,
+            message: "Internal server error",
+        });
     }
-  };
+};
+
+
+
+
+
+
   
 
 
