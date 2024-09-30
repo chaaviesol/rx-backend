@@ -2062,6 +2062,15 @@ const getUserAddedTp = async(req,res)=>{
     try{
         const {reportingOfficer_id} = req.body
 
+        if(!reportingOfficer_id){
+            return res.status(404).json({
+                error:false,
+                success:true,
+                message:"No data found"
+
+            })
+        }
+
         const getUser = await prisma.userData.findMany({
             where:{
                 reportingOfficer_id:reportingOfficer_id,
