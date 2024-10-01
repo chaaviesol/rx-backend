@@ -498,7 +498,7 @@ const leaveHistory = async (req, res) => {
         console.log({ find_leaveHistory })
         
         if (find_leaveHistory.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 error: true,
                 success: false,
                 message: "No data found"

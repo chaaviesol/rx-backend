@@ -128,9 +128,9 @@ const listDoctors = async(req,res)=>{
         for(let i=0; i<areas.length;i++){
             const area = areas[i]
             console.log({area})
-            const findAreaId = await prisma.headquarters.findMany({
+            const findAreaId = await prisma.subHeadquarter.findMany({
                 where:{
-                    sub_headquarter:area
+                    subheadquarter:area
                 }
             })
             console.log({findAreaId})
