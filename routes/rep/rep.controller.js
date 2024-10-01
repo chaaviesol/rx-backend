@@ -496,7 +496,7 @@ const leaveHistory = async (req, res) => {
             }
         })
         console.log({ find_leaveHistory })
-        
+        // checking whether the find_leaveHistory is not  a null array
         if (find_leaveHistory.length === 0) {
             return res.status(200).json({
                 error: true,
