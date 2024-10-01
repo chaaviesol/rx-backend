@@ -173,10 +173,15 @@ model manager_details{
 
 model headquarters{
   id                  Int            @id @default(autoincrement())
-  // doctor_id           Int?
-  // headquatersId       doctor_details @relation(fields: [id],references: [headquaters])
+ 
   headquarter_name    String?
-  sub_headquarter     String?
+  // sub_headquarter     String?
+}
+
+model subHeadquarter{
+  id               Int      @id @default(autoincrement())
+  headquarterId    Int?      
+  subheadquarter   String?
 }
 
 // model travel_plan{

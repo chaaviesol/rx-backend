@@ -483,7 +483,7 @@ const leaveHistory = async (req, res) => {
     try {
         const { uniqueRequesterId } = req.body
         if (!uniqueRequesterId) {
-            return res.status(404).json({
+            return res.status(200).json({
                 error: true,
                 success: false,
                 message: "RequesterID is missing"
@@ -1606,6 +1606,7 @@ const get_headquarters = async (req, res) => {
         })
     }
 }
+
 
 // const travel_plan = async(req,res)=>{
 //     try{
@@ -3151,10 +3152,43 @@ const markAsVisitedForTp = async(req,res)=>{
 }
 
 
+const getSubheadquaters = async(req,res)=>{
+    try{
+        const{headquarterId} = req.body
+         
+        if(!headquarterId){
+            return res.status(200).json({
+                error:false,
+                success:true,
+                message:"HeadquaterId is required"
+            })
+        }
+        const getSubheadquater = await prisma.subHeadquarter.findMany({
+            where:{
+                headquarterId:headquarterId
+            }
+        })
+        console.log({getSubheadquater})
+        res.status(200).json({
+            error:false,
+            success:true,
+            message:"Successfull",
+            data:getSubheadquater
+        })
+    }catch(err){
+        console.log({err})
+        res.status(404).json({
+            error:true,
+            success:true,
+            message:"Internal server error"
+        })
+    }
+}
+
 module.exports = {
     rep_registration, login, add_doctor, get_addedDoctors, leaveHistory, single_Details, delete_doctor, filter_dr, get_doctorDetail, delete_rep, report_expense,
     individual_expenseReport, add_drAddress, total_repCount, total_drCount, search_Rep, add_chemist, get_chemist, delete_chemist, search_chemist,
     edit_chemist, add_product, delete_product,editProduct, get_product, get_headquarters,notifications,searchByDate,search_expenseTable,
     markAsVisited,getVisitReport,singleChemistDetail,visitedDays,getSpecialization,getVisitedDates,getDoctorAddress,checkLocation,visitedDetailsByMonth,createTravelplan,
-    getTravelPlan,changeStatus,cancelTP,markAsVisitedForTp
+    getTravelPlan,changeStatus,cancelTP,markAsVisitedForTp,getSubheadquaters
 }
