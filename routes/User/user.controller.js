@@ -128,27 +128,45 @@ const listDoctors = async(req,res)=>{
         for(let i=0; i<areas.length;i++){
             const area = areas[i]
             console.log({area})
-            const findAreaId = await prisma.subHeadquarter.findMany({
-                where:{
-                    subheadquarter:area
-                }
-            })
-            console.log({findAreaId})
-            areaID.push(findAreaId)
-            const areaId = findAreaId[0].id
-            console.log({areaId})
+            // const findAreaId = await prisma.subHeadquarter.findMany({
+            //     where:{
+            //         subheadquarter:area
+            //     }
+            // })
+            // console.log({findAreaId})
+            // areaID.push(findAreaId)
+            // const areaId = findAreaId[0].id
+            // console.log({areaId})
 
-            const findDr = await prisma.doctor_details.findMany({
-                where:{
-                    headquaters:{
-                        equals:areaId
-                    },
-                   approvalStatus:"Accepted",
-                   created_UId:userId
+            // const findDr = await prisma.doctor_address.findMany({
+            //     where:{
+            //         headquaters:{
+            //             equals:areaId
+            //         },
+            //        approvalStatus:"Accepted",
+            //        created_UId:userId
                     
-                }
-            })
-            console.log({findDr})
+            //     }
+            // })
+            // console.log({findDr})
+
+
+
+
+            const findDr = await prisma.doctor_address.findMany({
+                where: {
+                    address: {
+                        path: ['subHeadQuarter'], // Target 'subHeadQuarter' inside the JSON
+                        string_contains: area, // Use the current area from the loop
+                    },
+                    // approvalStatus: "Accepted",
+                    // created_UId: userId
+                },
+                // include: {
+                //     schedule: true // Assuming there's a relation for schedule data
+                // }
+            });
+            console.log({ findDr });
            if(findDr.length === 0){
             return res.status(200).json({
                 error:false,
@@ -158,11 +176,18 @@ const listDoctors = async(req,res)=>{
            }      
         
         for(let j=0; j<findDr.length ;j++){
-            const drId = findDr[j].id
+            const drId = findDr[j].doc_id
             console.log({drId})
-            const firstName = findDr[j].firstName
-            const lastName = findDr[j].lastName
-            const visitType = findDr[j].visit_type
+
+            const findDoctor = await prisma.doctor_details.findFirst({
+                where:{
+                    id:drId
+                }
+            })
+            console.log({findDoctor})
+            const firstName = findDoctor.firstName
+            const lastName = findDoctor.lastName
+            const visitType = findDoctor.visit_type
 
             //fing the schedule of the doctor
             const findSchedule = await prisma.schedule.findMany({
