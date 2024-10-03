@@ -153,7 +153,7 @@ const listDoctors = async(req,res)=>{
 
 
 
-            const findDr = await prisma.doctor_address.findMany({
+            const findDrAddress = await prisma.doctor_address.findMany({
                 where: {
                     address: {
                         path: ['subHeadQuarter'], // Target 'subHeadQuarter' inside the JSON
@@ -166,8 +166,8 @@ const listDoctors = async(req,res)=>{
                 //     schedule: true // Assuming there's a relation for schedule data
                 // }
             });
-            console.log({ findDr });
-           if(findDr.length === 0){
+            console.log({ findDrAddress });
+           if(findDrAddress.length === 0){
             return res.status(200).json({
                 error:false,
                 success:true,
@@ -175,8 +175,8 @@ const listDoctors = async(req,res)=>{
             })
            }      
         
-        for(let j=0; j<findDr.length ;j++){
-            const drId = findDr[j].doc_id
+        for(let j=0; j<findDrAddress.length ;j++){
+            const drId = findDrAddress[j].doc_id
             console.log({drId})
 
             const findDoctor = await prisma.doctor_details.findFirst({
@@ -210,7 +210,8 @@ const listDoctors = async(req,res)=>{
                 firstName: firstName,
                 lastName: lastName,
                 visitType: visitType,
-                schedule: findSchedule
+                schedule: findSchedule,
+                findDrAddress:findDrAddress
             }
         });
     }
@@ -1152,13 +1153,13 @@ const doctorsInTp = async(req,res)=>{
 
             for(let j=0; j<travelPlanList.length; j++){
                 const drId =travelPlanList[j].dr_id
-                console.log({drId})
+                // console.log({drId})
                 const drDetails = await prisma.doctor_details.findMany({
                     where:{
                         id:drId
                     }
                 })
-                console.log({drDetails})
+                // console.log({drDetails})
                 drData.push(drDetails)
             }
         }
