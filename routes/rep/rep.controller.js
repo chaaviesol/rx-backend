@@ -1935,7 +1935,13 @@ const markAsVisited = async(req,res)=>{
         
         const formatteddate = formatnewDate(visiteddate);
         console.log({formatteddate})
-        
+        if(!remark){
+            return res.status(200).json({
+                error:true,
+                success:false,
+                message:"Remark is mandatory. Please provide a remark before submitting."
+            })
+        }
         const markVisited = await prisma.reporting_details.create({
              data:{
                 unique_reqId:reporterUniqueId,

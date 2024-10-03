@@ -156,7 +156,12 @@ const listDoctors = async(req,res)=>{
 
             const findSchedule = await prisma.schedule.findMany({
                 where:{
-                    dr_id:drID
+                    schedule:{
+                       path:['day'],
+                       equals:day,
+                     
+                    },
+                    user_id:userId
                 }
             })
             console.log({findSchedule})
@@ -167,14 +172,14 @@ const listDoctors = async(req,res)=>{
                     firstName:firstName,
                     lastName:lastName,
                     visit_type:visit_type,
-                    schedule:findSchedule,
+                    schedule:findSchedule[i],
                     findDrAddress:getAddress
                 }
             })
          }
             return res.status(200).json({
                 error:false,
-                suucess:true,
+                success:true,
                 message:'area should be an array',
                 data:dataList 
             })
@@ -1626,61 +1631,122 @@ const approveTp = async (req, res) => {
 
 
 
-const Performance = async(req,res)=>{
-    try{
-        const{requesterUniqueId,drId,month} = req.body
+// const Performance = async(req,res)=>{
+//     try{
+//         const{requesterUniqueId,drId,month} = req.body
      
       
-        const queryConditions = {
-            requesterUniqueId: requesterUniqueId,
-            dr_Id: drId
-        };
+//         const queryConditions = {
+//             requesterUniqueId: requesterUniqueId,
+//             dr_Id: drId
+//         };
 
        
-        if (month) {
-            queryConditions.date = {
-                contains: `-${month}-` 
-            };
-        }
+//         if (month) {
+//             queryConditions.date = {
+//                 contains: `-${month}-` 
+//             };
+//         }
 
-    const findVisitCount = await prisma.visit_record.findMany({
-            where: queryConditions
+//     const findVisitCount = await prisma.visit_record.findMany({
+//             where: queryConditions
+//         });
+
+//         console.log({ findVisitCount });
+//         const totalVisit =[]
+//         for (let i = 0; i < findVisitCount.length; i++) {
+//             const count = findVisitCount[i].visited;
+//             const totalVisits = findVisitCount[i].total_visits;
+
+//             // Calculate the visited percentage
+//             const visitedPercentage = (count / totalVisits) * 100;
+
+//             console.log({ count, visitedPercentage });
+
+//             // Add the percentage to the totalVisit array
+//             totalVisit.push({
+//                 ...findVisitCount[i],
+//                 visitedPercentage: visitedPercentage.toFixed(2) // Keeping up to two decimal places
+//             });
+//         }
+
+//         res.status(200).json({
+//             error:false,
+//             success:true,
+//             message:"Successfull",
+//             data:totalVisit
+//         })
+
+//     }catch(err){
+//         console.log({err})
+//         res.status(404).json({
+//             error:true,
+//             success:false,
+//             message:"Internal server error"
+//         })
+//     }
+// }
+const Performance = async (req, res) => {
+    try {
+      const { requesterUniqueId, drId, year } = req.body;
+  
+      // Define the base query conditions
+      const queryConditions = {
+        requesterUniqueId: requesterUniqueId,
+        dr_Id: drId
+      };
+  
+      // If year is provided, filter by the year
+      if (year) {
+        queryConditions.date = {
+          startsWith: `-${year}` // Assuming the date is in 'YYYY-MM-DD' format
+        };
+      }
+  
+      // Find the visit count with the query conditions
+      const findVisitCount = await prisma.visit_record.findMany({
+        where: queryConditions
+      });
+  
+      console.log({ findVisitCount });
+      const totalVisit = [];
+  
+      // Iterate over the visit records to calculate the percentage
+      for (let i = 0; i < findVisitCount.length; i++) {
+        const count = findVisitCount[i].visited;
+        const totalVisits = findVisitCount[i].total_visits;
+  
+        // Calculate the visited percentage
+        const visitedPercentage = (count / totalVisits) * 100;
+  
+        console.log({ count, visitedPercentage });
+  
+        // Add the percentage to the totalVisit array
+        totalVisit.push({
+          ...findVisitCount[i],
+          visitedPercentage: visitedPercentage.toFixed(2) // Keep up to two decimal places
         });
-
-        console.log({ findVisitCount });
-        const totalVisit =[]
-        for (let i = 0; i < findVisitCount.length; i++) {
-            const count = findVisitCount[i].visited;
-            const totalVisits = findVisitCount[i].total_visits;
-
-            // Calculate the visited percentage
-            const visitedPercentage = (count / totalVisits) * 100;
-
-            console.log({ count, visitedPercentage });
-
-            // Add the percentage to the totalVisit array
-            totalVisit.push({
-                ...findVisitCount[i],
-                visitedPercentage: visitedPercentage.toFixed(2) // Keeping up to two decimal places
-            });
-        }
-
-        res.status(200).json({
-            error:false,
-            success:true,
-            message:"Successfull",
-            data:totalVisit
-        })
-
-    }catch(err){
-        console.log({err})
-        res.status(404).json({
-            error:true,
-            success:false,
-            message:"Internal server error"
-        })
+      }
+  
+      // Return the result
+      res.status(200).json({
+        error: false,
+        success: true,
+        message: "Successful",
+        data: totalVisit
+      });
+  
+    } catch (err) {
+      console.log({ err });
+      // Return error response
+      res.status(404).json({
+        error: true,
+        success: false,
+        message: "Internal server error"
+      });
     }
-}
+  };
+  
 
 const userPerformance = async(req,res)=>{
     try{
