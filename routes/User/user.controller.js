@@ -118,158 +118,254 @@ const listArea = async(req,res)=>{
 }
 
 //api for listing doctor in respective headquaters
-const listDoctors = async(req,res)=>{
-    // console.log({req})
-    try{
-        const {areas,day,userId} = req.body
-        console.log("area----",areas[0])
-        // const areaID = []
-        const ScheduleList = []
-        if(Array.isArray(areas)){
+// const listDoctors = async(req,res)=>{
+//     // console.log({req})
+//     try{
+//         const {areas,day,userId} = req.body
+//         console.log("area----",areas[0])
+//         // const areaID = []
+//         const ScheduleList = []
+//         if(Array.isArray(areas)){
 
-         const findUserAddedDr = await prisma.doctor_details.findMany({
-            where:{
-                created_UId:userId,
-                approvalStatus:"Accepted"
-            }
-         })
-           console.log({findUserAddedDr})
-          const dataList =[]
-         for(let i=0; i<findUserAddedDr.length; i++){
-            const drID = findUserAddedDr[i].id
-            const firstName = findUserAddedDr[i].firstName
-            const lastName = findUserAddedDr[i].lastName
-            const visit_type = findUserAddedDr[i].visit_type
-            console.log({drID})
-            const getAddress = await prisma.doctor_address.findMany({
-                where:{
-                    doc_id:drID
-                },
-                select:{
-                    id:true,
-                    doc_id:true,
-                    address:true,
-                    userId:true
-                }
-            })
-            console.log({getAddress})
+//          const findUserAddedDr = await prisma.doctor_details.findMany({
+//             where:{
+//                 created_UId:userId,
+//                 approvalStatus:"Accepted"
+//             }
+//          })
+//            console.log({findUserAddedDr})
+//           const dataList =[]
+//          for(let i=0; i<findUserAddedDr.length; i++){
+//             const drID = findUserAddedDr[i].id
+//             const firstName = findUserAddedDr[i].firstName
+//             const lastName = findUserAddedDr[i].lastName
+//             const visit_type = findUserAddedDr[i].visit_type
+//             console.log({drID})
+//             const getAddress = await prisma.doctor_address.findMany({
+//                 where:{
+//                     doc_id:drID
+//                 },
+//                 select:{
+//                     id:true,
+//                     doc_id:true,
+//                     address:true,
+//                     userId:true
+//                 }
+//             })
+//             console.log({getAddress})
 
-            const findSchedule = await prisma.schedule.findMany({
-                where:{
-                    schedule:{
-                       path:['day'],
-                       equals:day,
+//             const findSchedule = await prisma.schedule.findMany({
+//                 where:{
+//                     schedule:{
+//                        path:['day'],
+//                        equals:day,
                      
-                    },
-                    user_id:userId
-                }
-            })
-            console.log({findSchedule})
+//                     },
+//                     user_id:userId
+//                 }
+//             })
+//             console.log({findSchedule})
 
-            dataList.push({
-                doctor:{
-                    id:drID,
-                    firstName:firstName,
-                    lastName:lastName,
-                    visit_type:visit_type,
-                    schedule:findSchedule[i],
-                    findDrAddress:getAddress
-                }
-            })
-         }
-            return res.status(200).json({
-                error:false,
-                success:true,
-                message:'area should be an array',
-                data:dataList 
-            })
-        }
-        for(let i=0; i<areas.length;i++){
-            const area = areas[i]
-            console.log({area})
+//             dataList.push({
+//                 doctor:{
+//                     id:drID,
+//                     firstName:firstName,
+//                     lastName:lastName,
+//                     visit_type:visit_type,
+//                     schedule:findSchedule[i],
+//                     findDrAddress:getAddress
+//                 }
+//             })
+//          }
+//             return res.status(200).json({
+//                 error:false,
+//                 success:true,
+//                 message:'area should be an array',
+//                 data:dataList 
+//             })
+//         }
+//         for(let i=0; i<areas.length;i++){
+//             const area = areas[i]
+//             console.log({area})
            
 
 
 
-            const findDrAddress = await prisma.doctor_address.findMany({
-                where: {
-                    address: {
-                        path: ['subHeadQuarter'], 
-                        string_contains: area, 
-                    },
-                    // approvalStatus: "Accepted",
-                    userId: userId
-                },
+//             const findDrAddress = await prisma.doctor_address.findMany({
+//                 where: {
+//                     address: {
+//                         path: ['subHeadQuarter'], 
+//                         string_contains: area, 
+//                     },
+//                     // approvalStatus: "Accepted",
+//                     userId: userId
+//                 },
               
-            });
-            console.log({ findDrAddress });
-           if(findDrAddress.length === 0){
-            return res.status(200).json({
-                error:false,
-                success:true,
-                message:'No doctors exist for this search.'
-            })
-           }      
+//             });
+//             console.log({ findDrAddress });
+//            if(findDrAddress.length === 0){
+//             return res.status(200).json({
+//                 error:false,
+//                 success:true,
+//                 message:'No doctors exist for this search.'
+//             })
+//            }      
         
-        for(let j=0; j<findDrAddress.length ;j++){
-            const drId = findDrAddress[j].doc_id
-            console.log({drId})
+//         for(let j=0; j<findDrAddress.length ;j++){
+//             const drId = findDrAddress[j].doc_id
+//             console.log({drId})
 
-            const findDoctor = await prisma.doctor_details.findFirst({
-                where:{
-                    id:drId
-                }
-            })
-            console.log({findDoctor})
-            const firstName = findDoctor.firstName
-            const lastName = findDoctor.lastName
-            const visitType = findDoctor.visit_type
+//             const findDoctor = await prisma.doctor_details.findFirst({
+//                 where:{
+//                     id:drId
+//                 }
+//             })
+//             console.log({findDoctor})
+//             const firstName = findDoctor.firstName
+//             const lastName = findDoctor.lastName
+//             const visitType = findDoctor.visit_type
 
-            //fing the schedule of the doctor
-            const findSchedule = await prisma.schedule.findMany({
-                where:{
-                 schedule:{
-                    path:['day'],
-                    equals:day,
-                    // mode:'default'
-                 },
-                 dr_id:drId
+//             //fing the schedule of the doctor
+//             const findSchedule = await prisma.schedule.findMany({
+//                 where:{
+//                  schedule:{
+//                     path:['day'],
+//                     equals:day,
+//                     // mode:'default'
+//                  },
+//                  dr_id:drId
                 
+//                 }
+//             })
+//             console.log({findSchedule})
+
+//                if (findSchedule.length > 0) {
+//                      ScheduleList.push({
+//             doctor: {
+//                 id: drId,
+//                 firstName: firstName,
+//                 lastName: lastName,
+//                 visitType: visitType,
+//                 schedule: findSchedule,
+//                 findDrAddress:findDrAddress
+//             }
+//         });
+//              }
+//         }
+//         }
+//         res.status(200).json({
+//             error:false,
+//             success:true,
+//             message:"Successfull",
+//             data:ScheduleList
+//         })
+
+
+//     }catch(err){
+//         console.log({err})
+//         res.status(404).json({
+//             error:true,
+//             success:false,
+//             message:"Internal server error"
+//         })
+//     }
+// }
+const listDoctors = async (req, res) => {
+    try {
+        const { areas, day, userId } = req.body;
+        const ScheduleList = [];
+        
+        if (Array.isArray(areas) && areas.length > 0) {
+            for (let i = 0; i < areas.length; i++) {
+                const area = areas[i];
+                console.log({ area });
+
+                // Find doctors' addresses matching the area
+                const findDrAddress = await prisma.doctor_address.findMany({
+                    where: {
+                        address: {
+                            path: ['subHeadQuarter'],
+                            string_contains: area,
+                        },
+                        userId: userId,
+                    },
+                });
+                
+                if (findDrAddress.length === 0) {
+                    return res.status(200).json({
+                        error: false,
+                        success: true,
+                        message: 'No doctors exist for this search.'
+                    });
                 }
-            })
-            console.log({findSchedule})
 
-               if (findSchedule.length > 0) {
-                     ScheduleList.push({
-            doctor: {
-                id: drId,
-                firstName: firstName,
-                lastName: lastName,
-                visitType: visitType,
-                schedule: findSchedule,
-                findDrAddress:findDrAddress
+                // Loop through the doctors found in this area
+                for (let j = 0; j < findDrAddress.length; j++) {
+                    const drId = findDrAddress[j].doc_id;
+
+                    // Fetch doctor details
+                    const findDoctor = await prisma.doctor_details.findFirst({
+                        where: {
+                            id: drId,
+                            approvalStatus: "Accepted"
+                        }
+                    });
+
+                    if (!findDoctor) {
+                        continue;  // Skip if doctor not found
+                    }
+
+                    const { firstName, lastName, visit_type } = findDoctor;
+
+                    // Fetch doctor's schedule matching the given day
+                    const findSchedule = await prisma.schedule.findMany({
+                        where: {
+                            dr_id: drId,
+                            schedule: {
+                                path: ['day'],
+                                equals: day,  // Filter by the correct day
+                            },
+                        },
+                    });
+
+                    if (findSchedule.length > 0) {
+                        // Add to the result list only if schedule matches the day
+                        ScheduleList.push({
+                            doctor: {
+                                id: drId,
+                                firstName,
+                                lastName,
+                                visitType: visit_type,
+                                schedule: findSchedule,
+                                findDrAddress: findDrAddress[j]
+                            }
+                        });
+                    }
+                }
             }
+            return res.status(200).json({
+                error: false,
+                success: true,
+                message: "Successful",
+                data: ScheduleList
+            });
+        } else {
+            return res.status(400).json({
+                error: true,
+                success: false,
+                message: 'Areas should be an array with valid entries.'
+            });
+        }
+    } catch (err) {
+        console.log({ err });
+        return res.status(500).json({
+            error: true,
+            success: false,
+            message: "Internal server error"
         });
-             }
-        }
-        }
-        res.status(200).json({
-            error:false,
-            success:true,
-            message:"Successfull",
-            data:ScheduleList
-        })
-
-
-    }catch(err){
-        console.log({err})
-        res.status(404).json({
-            error:true,
-            success:false,
-            message:"Internal server error"
-        })
     }
-}
+};
+
 
 // const listDoctors = async (req, res) => {
 //     try {
