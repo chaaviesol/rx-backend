@@ -56,5 +56,4 @@ repRouter.post('/markAsVisitedForTp',markAsVisitedForTp)
 repRouter.post('/getSubheadquaters',getSubheadquaters)
 
 
-
 module.exports = repRouter
